@@ -1,0 +1,591 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.1//EN" "http://www.w3.org/TR/xhtml11/DTD/xhtml11.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="application/xhtml+xml; charset=ISO-8859-1" />
+<title>ZFIR0235_VENDOR_ONLINE_MREP</title>
+<style type="text/css">
+.code{ font-family:"Courier New", Courier, monospace; color:#000; font-size:14px; background-color:#F2F4F7 }
+  .codeComment {font-family:"Courier New", Courier, monospace; color:#0000F0; font-size:14px; background-color:#F2F4F7 }
+  .normalBold{ font-family:Arial, Helvetica, sans-serif; color:#000; font-size:12px; font-weight:800 }
+  .normalBoldLarge{ font-family:Arial, Helvetica, sans-serif; color:#000; font-size:16px; font-weight:800 }
+</style>
+<style type="text/css">
+  .normal{ font-family:Arial, Helvetica, sans-serif; color:#000; font-size:12px }
+  .footer{ font-family:Arial, Helvetica, sans-serif; color:#000; font-size:12px; text-align: center }
+  h2{ font-family:Arial, Helvetica, sans-serif; color:#000; font-size:16px; font-weight:800 }
+  h3{ font-family:Arial, Helvetica, sans-serif; color:#000; font-size:14px; font-weight:800 }
+  .outerTable{
+   background-color:#E0E7ED;
+   width:100%;
+   border-top-width: thin;
+   border-right-width: thin;
+   border-right-width: thin;
+   border-left-width: thin;
+   border-top-style: solid;
+   border-right-style: solid;
+   border-bottom-style: solid;
+   border-left-style: solid;
+  }
+  .innerTable{
+   background-color:#F2F4F7;
+   width:100%;
+   border-top-width: thin;
+   border-right-width: thin;
+   border-bottom-width: thin;
+   border-left-width: thin;
+   border-top-style: solid;
+   border-right-style: solid;
+   border-bottom-style: solid;
+   border-left-style: solid;
+  }
+</style>
+</head>
+<body>
+<table class="outerTable">
+  <tr class="normalBoldLarge">
+     <td><h2>Code listing for: ZFIR0235_VENDOR_ONLINE_MREP</h2>
+<h3> Description: Vendor Master Report</h3></td>
+   </tr>
+  <tr>
+     <td>
+     <table class="innerTable">
+       <tr>
+          <td>
+   <div class="codeComment">
+*&---------------------------------------------------------------------*<br />
+*&&nbsp;Report&nbsp;&nbsp;ZFIR0235_VENDOR_ONLINE_MREP<br />
+*&<br />
+*&---------------------------------------------------------------------*<br />
+*&<br />
+*&<br />
+*&---------------------------------------------------------------------*<br />
+<br />
+   </div>
+   <div class="code">
+REPORT zfir0235_vendor_online_mrep.<br />
+TABLES: zfi_prjbnkzapp, zfi_signzapp, zfi_prjmapp, zfi_prj_prctr, bkpf.<br />
+<br />
+TYPES: BEGIN OF ty_final,<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;bukrs&nbsp;TYPE&nbsp;bkpf-bukrs,<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;butxt&nbsp;TYPE&nbsp;t001-butxt,<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;project&nbsp;TYPE&nbsp;zfi_prjmapp-project,<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;pr_desc&nbsp;TYPE&nbsp;zfi_prjmapp-pr_desc,<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;prctr&nbsp;TYPE&nbsp;cepc-prctr,<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;ltext&nbsp;TYPE&nbsp;cepct-ltext,<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;lcode&nbsp;&nbsp;&nbsp;TYPE&nbsp;zfi_authapp-authkey,<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;ldesc&nbsp;&nbsp;&nbsp;TYPE&nbsp;zfi_authapp-auth_desc,<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;hbkid&nbsp;TYPE&nbsp;zfi_prjbnkzapp-hbkid,<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;bankl&nbsp;TYPE&nbsp;bnka-bankl,<br />
+   </div>
+   <div class="codeComment">
+*&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;mngr&nbsp;&nbsp;TYPE&nbsp;zfi_vopmngr-uname,<br />
+*&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;mngrn&nbsp;TYPE&nbsp;zfi_vopmngr-name_textc,<br />
+*&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;mngre&nbsp;TYPE&nbsp;ad_smtpadr,<br />
+   </div>
+   <div class="code">
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;sign1&nbsp;TYPE&nbsp;uname,<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;sig1n&nbsp;TYPE&nbsp;user_addr-name_textc,<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;sig1e&nbsp;TYPE&nbsp;ad_smtpadr,<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;sign2&nbsp;TYPE&nbsp;uname,<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;sig2n&nbsp;TYPE&nbsp;user_addr-name_textc,<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;sig2e&nbsp;TYPE&nbsp;ad_smtpadr,<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;datab&nbsp;TYPE&nbsp;datab,<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;datbi&nbsp;TYPE&nbsp;datbi,<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;END&nbsp;OF&nbsp;ty_final.<br />
+<br />
+DATA: it_prjmapp TYPE TABLE OF zfi_prjmapp,<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;it_prctr&nbsp;TYPE&nbsp;TABLE&nbsp;OF&nbsp;zfi_prj_prctr,<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;it_prjbank&nbsp;TYPE&nbsp;TABLE&nbsp;OF&nbsp;zfi_prjbnkzapp,<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;it_sign&nbsp;TYPE&nbsp;TABLE&nbsp;OF&nbsp;zfi_signzapp,<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;it_t001&nbsp;&nbsp;TYPE&nbsp;TABLE&nbsp;OF&nbsp;t001,<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;it_final&nbsp;TYPE&nbsp;TABLE&nbsp;OF&nbsp;ty_final.<br />
+<br />
+DATA: wa_prjmapp TYPE zfi_prjmapp,<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;wa_prctr&nbsp;TYPE&nbsp;zfi_prj_prctr,<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;wa_t001&nbsp;TYPE&nbsp;t001,<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;wa_prjbank&nbsp;TYPE&nbsp;zfi_prjbnkzapp,<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;wa_sign&nbsp;TYPE&nbsp;zfi_signzapp,<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;wa_usr21&nbsp;TYPE&nbsp;usr21,<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;wa_final&nbsp;TYPE&nbsp;ty_final.<br />
+<br />
+DATA: it_fcat    TYPE   slis_t_fieldcat_alv,<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;wa_fcat&nbsp;&nbsp;&nbsp;&nbsp;TYPE&nbsp;&nbsp;&nbsp;slis_fieldcat_alv.<br />
+<br />
+"Select Screen Design<br />
+SELECTION-SCREEN BEGIN OF BLOCK b1 WITH FRAME TITLE text-001.<br />
+SELECT-OPTIONS: s_bukrs FOR zfi_prjmapp-bukrs,<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;s_prj&nbsp;&nbsp;&nbsp;FOR&nbsp;zfi_prjmapp-project,<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;s_prctr&nbsp;FOR&nbsp;zfi_prj_prctr-prctr,<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;s_hbkid&nbsp;FOR&nbsp;zfi_prjbnkzapp-hbkid,<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;s_sign&nbsp;&nbsp;FOR&nbsp;zfi_signzapp-uname.<br />
+PARAMETERS: p_repdt TYPE bkpf-budat DEFAULT sy-datum.<br />
+SELECTION-SCREEN END OF BLOCK b1.<br />
+<br />
+START-OF-SELECTION.<br />
+&nbsp;&nbsp;PERFORM&nbsp;get_data.<br />
+<br />
+END-OF-SELECTION.<br />
+&nbsp;&nbsp;PERFORM&nbsp;process_data.<br />
+&nbsp;&nbsp;PERFORM&nbsp;fieldcatalog.<br />
+&nbsp;&nbsp;PERFORM&nbsp;display.<br />
+   </div>
+   <div class="codeComment">
+*&---------------------------------------------------------------------*<br />
+*&&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Form&nbsp;&nbsp;GET_DATA<br />
+*&---------------------------------------------------------------------*<br />
+*&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;text<br />
+*----------------------------------------------------------------------*<br />
+*&nbsp;&nbsp;--&gt;&nbsp;&nbsp;p1&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;text<br />
+*&nbsp;&nbsp;&lt;--&nbsp;&nbsp;p2&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;text<br />
+*----------------------------------------------------------------------*<br />
+   </div>
+   <div class="code">
+FORM get_data .<br />
+<br />
+&nbsp;&nbsp;IF&nbsp;s_prctr&nbsp;IS&nbsp;NOT&nbsp;INITIAL.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;SELECT&nbsp;*&nbsp;FROM&nbsp;zfi_prj_prctr&nbsp;INTO&nbsp;TABLE&nbsp;it_prctr<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;WHERE&nbsp;bukrs&nbsp;IN&nbsp;s_bukrs<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;AND&nbsp;&nbsp;prctr&nbsp;IN&nbsp;s_prctr<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;AND&nbsp;&nbsp;project&nbsp;IN&nbsp;s_prj.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;IF&nbsp;it_prctr&nbsp;IS&nbsp;NOT&nbsp;INITIAL.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;SELECT&nbsp;*&nbsp;FROM&nbsp;t001&nbsp;INTO&nbsp;TABLE&nbsp;it_t001&nbsp;FOR&nbsp;ALL&nbsp;ENTRIES&nbsp;IN<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;it_prctr&nbsp;WHERE&nbsp;bukrs&nbsp;=&nbsp;it_prctr-bukrs.<br />
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;SELECT&nbsp;*&nbsp;FROM&nbsp;zfi_prjmapp&nbsp;INTO&nbsp;TABLE&nbsp;it_prjmapp&nbsp;FOR&nbsp;ALL&nbsp;ENTRIES&nbsp;IN<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;it_prctr&nbsp;WHERE&nbsp;bukrs&nbsp;=&nbsp;&nbsp;it_prctr-bukrs<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;AND&nbsp;project&nbsp;=&nbsp;&nbsp;it_prctr-project<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;AND&nbsp;prstdt&nbsp;LE&nbsp;p_repdt<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;AND&nbsp;prendt&nbsp;GE&nbsp;p_repdt.<br />
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;SELECT&nbsp;*&nbsp;FROM&nbsp;zfi_prjbnkzapp&nbsp;INTO&nbsp;TABLE&nbsp;it_prjbank&nbsp;FOR&nbsp;ALL&nbsp;ENTRIES&nbsp;IN<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;it_prctr&nbsp;WHERE&nbsp;project&nbsp;=&nbsp;&nbsp;it_prctr-project<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;AND&nbsp;prctr&nbsp;=&nbsp;&nbsp;it_prctr-prctr.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;IF&nbsp;it_prjbank&nbsp;IS&nbsp;NOT&nbsp;INITIAL.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;SELECT&nbsp;*&nbsp;FROM&nbsp;zfi_signzapp&nbsp;INTO&nbsp;TABLE&nbsp;it_sign&nbsp;FOR&nbsp;ALL&nbsp;ENTRIES&nbsp;IN<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;it_prjbank&nbsp;WHERE&nbsp;hbkid&nbsp;=&nbsp;&nbsp;&nbsp;it_prjbank-hbkid.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;ENDIF.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;ENDIF.<br />
+&nbsp;&nbsp;ELSE.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;SELECT&nbsp;*&nbsp;FROM&nbsp;zfi_prjmapp&nbsp;INTO&nbsp;TABLE&nbsp;it_prjmapp<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;WHERE&nbsp;bukrs&nbsp;IN&nbsp;s_bukrs&nbsp;AND&nbsp;project&nbsp;IN&nbsp;s_prj<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;AND&nbsp;prstdt&nbsp;LE&nbsp;p_repdt<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;AND&nbsp;prendt&nbsp;GE&nbsp;p_repdt.<br />
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;IF&nbsp;it_prjmapp&nbsp;IS&nbsp;NOT&nbsp;INITIAL.<br />
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;SELECT&nbsp;*&nbsp;FROM&nbsp;zfi_prj_prctr&nbsp;INTO&nbsp;TABLE&nbsp;it_prctr&nbsp;FOR&nbsp;ALL&nbsp;ENTRIES&nbsp;IN<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;it_prjmapp&nbsp;WHERE&nbsp;bukrs&nbsp;=&nbsp;it_prjmapp-bukrs<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;AND&nbsp;&nbsp;project&nbsp;=&nbsp;it_prjmapp-project.<br />
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;SELECT&nbsp;*&nbsp;FROM&nbsp;t001&nbsp;INTO&nbsp;TABLE&nbsp;it_t001&nbsp;FOR&nbsp;ALL&nbsp;ENTRIES&nbsp;IN<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;it_prjmapp&nbsp;WHERE&nbsp;bukrs&nbsp;=&nbsp;it_prjmapp-bukrs.<br />
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;SELECT&nbsp;*&nbsp;FROM&nbsp;zfi_prjbnkzapp&nbsp;INTO&nbsp;TABLE&nbsp;it_prjbank&nbsp;FOR&nbsp;ALL&nbsp;ENTRIES&nbsp;IN<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;it_prjmapp&nbsp;WHERE&nbsp;project&nbsp;=&nbsp;&nbsp;it_prjmapp-project.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;IF&nbsp;it_prjbank&nbsp;IS&nbsp;NOT&nbsp;INITIAL.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;SELECT&nbsp;*&nbsp;FROM&nbsp;zfi_signzapp&nbsp;INTO&nbsp;TABLE&nbsp;it_sign&nbsp;FOR&nbsp;ALL&nbsp;ENTRIES&nbsp;IN<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;it_prjbank&nbsp;WHERE&nbsp;hbkid&nbsp;=&nbsp;&nbsp;&nbsp;it_prjbank-hbkid.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;ENDIF.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;ENDIF.<br />
+&nbsp;&nbsp;ENDIF.<br />
+ENDFORM.                    " GET_DATA<br />
+   </div>
+   <div class="codeComment">
+*&---------------------------------------------------------------------*<br />
+*&&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Form&nbsp;&nbsp;PROCESS_DATA<br />
+*&---------------------------------------------------------------------*<br />
+*&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;text<br />
+*----------------------------------------------------------------------*<br />
+*&nbsp;&nbsp;--&gt;&nbsp;&nbsp;p1&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;text<br />
+*&nbsp;&nbsp;&lt;--&nbsp;&nbsp;p2&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;text<br />
+*----------------------------------------------------------------------*<br />
+   </div>
+   <div class="code">
+FORM process_data .<br />
+&nbsp;&nbsp;IF&nbsp;it_prjmapp&nbsp;IS&nbsp;NOT&nbsp;INITIAL.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;LOOP&nbsp;AT&nbsp;it_prjmapp&nbsp;INTO&nbsp;wa_prjmapp.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;wa_final-bukrs&nbsp;=&nbsp;wa_prjmapp-bukrs.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;wa_final-project&nbsp;=&nbsp;wa_prjmapp-project.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;wa_final-pr_desc&nbsp;=&nbsp;wa_prjmapp-pr_desc.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;wa_final-lcode&nbsp;=&nbsp;wa_prjmapp-authkey.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;wa_final-ldesc&nbsp;=&nbsp;wa_prjmapp-auth_desc.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;wa_final-datab&nbsp;=&nbsp;wa_prjmapp-prstdt.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;wa_final-datbi&nbsp;=&nbsp;wa_prjmapp-prendt.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;READ&nbsp;TABLE&nbsp;it_t001&nbsp;INTO&nbsp;wa_t001<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;WITH&nbsp;KEY&nbsp;bukrs&nbsp;=&nbsp;wa_final-bukrs.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;IF&nbsp;sy-subrc&nbsp;EQ&nbsp;0.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;wa_final-butxt&nbsp;=&nbsp;wa_t001-butxt.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;ENDIF.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;READ&nbsp;TABLE&nbsp;it_prctr&nbsp;INTO&nbsp;wa_prctr<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;WITH&nbsp;KEY&nbsp;bukrs&nbsp;&nbsp;&nbsp;=&nbsp;wa_final-bukrs<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;project&nbsp;=&nbsp;wa_final-project.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;IF&nbsp;sy-subrc&nbsp;EQ&nbsp;0.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;wa_final-prctr&nbsp;=&nbsp;wa_prctr-prctr.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;wa_final-ltext&nbsp;=&nbsp;wa_prctr-ltext.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;ENDIF.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;READ&nbsp;TABLE&nbsp;it_prjbank&nbsp;INTO&nbsp;wa_prjbank<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;WITH&nbsp;KEY&nbsp;project&nbsp;=&nbsp;wa_final-project<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;prctr&nbsp;=&nbsp;wa_final-prctr.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;IF&nbsp;sy-subrc&nbsp;EQ&nbsp;0.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;wa_final-hbkid&nbsp;=&nbsp;wa_prjbank-hbkid.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;SELECT&nbsp;SINGLE&nbsp;bankl<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;FROM&nbsp;t012<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;INTO&nbsp;wa_final-bankl&nbsp;WHERE<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;bukrs&nbsp;=&nbsp;wa_final-bukrs&nbsp;AND<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;hbkid&nbsp;=&nbsp;wa_final-hbkid&nbsp;AND<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;banks&nbsp;=&nbsp;'IN'.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;CLEAR&nbsp;wa_sign.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;READ&nbsp;TABLE&nbsp;it_sign&nbsp;INTO&nbsp;wa_sign&nbsp;WITH&nbsp;KEY&nbsp;bukrs&nbsp;=&nbsp;wa_final-bukrs<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;hbkid&nbsp;=&nbsp;wa_final-hbkid<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;sign_ty&nbsp;=&nbsp;'01'.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;IF&nbsp;sy-subrc&nbsp;EQ&nbsp;0.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;CLEAR:&nbsp;wa_usr21.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;wa_final-sign1&nbsp;=&nbsp;wa_sign-uname.<br />
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;SELECT&nbsp;SINGLE&nbsp;name_textc&nbsp;FROM&nbsp;user_addr&nbsp;INTO&nbsp;wa_final-sig1n<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;WHERE&nbsp;bname&nbsp;=&nbsp;wa_final-sign1.<br />
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;SELECT&nbsp;SINGLE&nbsp;*&nbsp;FROM&nbsp;usr21&nbsp;INTO&nbsp;wa_usr21<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;WHERE&nbsp;bname&nbsp;=&nbsp;wa_final-sign1.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;IF&nbsp;sy-subrc&nbsp;EQ&nbsp;0.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;SELECT&nbsp;SINGLE&nbsp;smtp_addr&nbsp;FROM&nbsp;adr6&nbsp;INTO&nbsp;wa_final-sig1e<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;WHERE&nbsp;addrnumber&nbsp;&nbsp;=&nbsp;wa_usr21-addrnumber<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;AND&nbsp;persnumber&nbsp;=&nbsp;wa_usr21-persnumber.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;ENDIF.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;CLEAR:&nbsp;wa_usr21.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;ENDIF.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;CLEAR&nbsp;wa_sign.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;READ&nbsp;TABLE&nbsp;it_sign&nbsp;INTO&nbsp;wa_sign&nbsp;WITH&nbsp;KEY&nbsp;bukrs&nbsp;=&nbsp;wa_final-bukrs<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;hbkid&nbsp;=&nbsp;wa_final-hbkid<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;sign_ty&nbsp;=&nbsp;'02'.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;IF&nbsp;sy-subrc&nbsp;EQ&nbsp;0.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;CLEAR:&nbsp;wa_usr21.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;wa_final-sign2&nbsp;=&nbsp;wa_sign-uname.<br />
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;SELECT&nbsp;SINGLE&nbsp;name_textc&nbsp;FROM&nbsp;user_addr&nbsp;INTO&nbsp;wa_final-sig2n<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;WHERE&nbsp;bname&nbsp;=&nbsp;wa_final-sign2.<br />
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;SELECT&nbsp;SINGLE&nbsp;*&nbsp;FROM&nbsp;usr21&nbsp;INTO&nbsp;wa_usr21<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;WHERE&nbsp;bname&nbsp;=&nbsp;wa_final-sign2.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;IF&nbsp;sy-subrc&nbsp;EQ&nbsp;0.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;SELECT&nbsp;SINGLE&nbsp;smtp_addr&nbsp;FROM&nbsp;adr6&nbsp;INTO&nbsp;wa_final-sig2e<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;WHERE&nbsp;addrnumber&nbsp;&nbsp;=&nbsp;wa_usr21-addrnumber<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;AND&nbsp;persnumber&nbsp;=&nbsp;wa_usr21-persnumber.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;ENDIF.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;CLEAR:&nbsp;wa_usr21.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;ENDIF.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;ENDIF.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;APPEND&nbsp;wa_final&nbsp;TO&nbsp;it_final.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;CLEAR:&nbsp;wa_final,&nbsp;wa_usr21,&nbsp;&nbsp;wa_prjbank,&nbsp;wa_sign,&nbsp;wa_prjmapp,<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;wa_t001,wa_prctr.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;ENDLOOP.<br />
+&nbsp;&nbsp;ELSEIF&nbsp;it_prctr&nbsp;IS&nbsp;NOT&nbsp;INITIAL.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;LOOP&nbsp;AT&nbsp;it_prctr&nbsp;INTO&nbsp;wa_prctr.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;wa_final-prctr&nbsp;=&nbsp;wa_prctr-prctr.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;wa_final-ltext&nbsp;=&nbsp;wa_prctr-ltext.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;wa_final-bukrs&nbsp;=&nbsp;wa_prctr-bukrs.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;wa_final-prctr&nbsp;=&nbsp;wa_prctr-project.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;wa_final-pr_desc&nbsp;=&nbsp;wa_prctr-pr_desc.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;READ&nbsp;TABLE&nbsp;it_t001&nbsp;INTO&nbsp;wa_t001&nbsp;WITH&nbsp;KEY<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;bukrs&nbsp;=&nbsp;wa_final-bukrs.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;IF&nbsp;sy-subrc&nbsp;EQ&nbsp;0.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;wa_final-butxt&nbsp;=&nbsp;wa_t001-butxt.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;ENDIF.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;READ&nbsp;TABLE&nbsp;it_prjmapp&nbsp;INTO&nbsp;wa_prjmapp&nbsp;WITH&nbsp;KEY<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;bukrs&nbsp;=&nbsp;wa_final-bukrs<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;project&nbsp;=&nbsp;wa_final-project.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;IF&nbsp;sy-subrc&nbsp;EQ&nbsp;0.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;wa_final-lcode&nbsp;=&nbsp;wa_prjmapp-authkey.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;wa_final-ldesc&nbsp;=&nbsp;wa_prjmapp-auth_desc.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;ENDIF.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;READ&nbsp;TABLE&nbsp;it_prjbank&nbsp;INTO&nbsp;wa_prjbank&nbsp;WITH&nbsp;KEY<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;project&nbsp;=&nbsp;wa_final-project<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;prctr&nbsp;=&nbsp;wa_final-prctr.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;IF&nbsp;sy-subrc&nbsp;EQ&nbsp;0.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;wa_final-hbkid&nbsp;=&nbsp;wa_prjbank-hbkid.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;SELECT&nbsp;SINGLE&nbsp;bankl&nbsp;FROM&nbsp;t012&nbsp;INTO&nbsp;wa_final-bankl&nbsp;WHERE<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;bukrs&nbsp;=&nbsp;wa_final-bukrs&nbsp;AND<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;hbkid&nbsp;=&nbsp;wa_final-hbkid&nbsp;AND<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;banks&nbsp;=&nbsp;'IN'.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;CLEAR&nbsp;wa_sign.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;READ&nbsp;TABLE&nbsp;it_sign&nbsp;INTO&nbsp;wa_sign&nbsp;WITH&nbsp;KEY&nbsp;bukrs&nbsp;=&nbsp;wa_final-bukrs<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;hbkid&nbsp;=&nbsp;wa_final-hbkid<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;sign_ty&nbsp;=&nbsp;'01'.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;IF&nbsp;sy-subrc&nbsp;EQ&nbsp;0.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;CLEAR:&nbsp;wa_usr21.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;wa_final-sign1&nbsp;=&nbsp;wa_sign-uname.<br />
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;SELECT&nbsp;SINGLE&nbsp;name_textc&nbsp;FROM&nbsp;user_addr&nbsp;INTO&nbsp;wa_final-sig1n<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;WHERE&nbsp;bname&nbsp;=&nbsp;wa_final-sign1.<br />
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;SELECT&nbsp;SINGLE&nbsp;*&nbsp;FROM&nbsp;usr21&nbsp;INTO&nbsp;wa_usr21<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;WHERE&nbsp;bname&nbsp;=&nbsp;wa_final-sign1.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;IF&nbsp;sy-subrc&nbsp;EQ&nbsp;0.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;SELECT&nbsp;SINGLE&nbsp;smtp_addr&nbsp;FROM&nbsp;adr6&nbsp;INTO&nbsp;wa_final-sig1e<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;WHERE&nbsp;addrnumber&nbsp;&nbsp;=&nbsp;wa_usr21-addrnumber<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;AND&nbsp;persnumber&nbsp;=&nbsp;wa_usr21-persnumber.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;ENDIF.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;CLEAR:&nbsp;wa_usr21.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;ENDIF.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;CLEAR&nbsp;wa_sign.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;READ&nbsp;TABLE&nbsp;it_sign&nbsp;INTO&nbsp;wa_sign&nbsp;WITH&nbsp;KEY&nbsp;bukrs&nbsp;=&nbsp;wa_final-bukrs<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;hbkid&nbsp;=&nbsp;wa_final-hbkid<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;sign_ty&nbsp;=&nbsp;'02'.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;IF&nbsp;sy-subrc&nbsp;EQ&nbsp;0.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;CLEAR:&nbsp;wa_usr21.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;wa_final-sign2&nbsp;=&nbsp;wa_sign-uname.<br />
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;SELECT&nbsp;SINGLE&nbsp;name_textc&nbsp;FROM&nbsp;user_addr&nbsp;INTO&nbsp;wa_final-sig2n<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;WHERE&nbsp;bname&nbsp;=&nbsp;wa_final-sign2.<br />
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;SELECT&nbsp;SINGLE&nbsp;*&nbsp;FROM&nbsp;usr21&nbsp;INTO&nbsp;wa_usr21<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;WHERE&nbsp;bname&nbsp;=&nbsp;wa_final-sign2.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;IF&nbsp;sy-subrc&nbsp;EQ&nbsp;0.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;SELECT&nbsp;SINGLE&nbsp;smtp_addr&nbsp;FROM&nbsp;adr6&nbsp;INTO&nbsp;wa_final-sig2e<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;WHERE&nbsp;addrnumber&nbsp;&nbsp;=&nbsp;wa_usr21-addrnumber<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;AND&nbsp;persnumber&nbsp;=&nbsp;wa_usr21-persnumber.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;ENDIF.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;CLEAR:&nbsp;wa_usr21.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;ENDIF.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;ENDIF.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;APPEND&nbsp;wa_final&nbsp;TO&nbsp;it_final.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;CLEAR:&nbsp;wa_final,&nbsp;wa_usr21,&nbsp;&nbsp;wa_prjbank,&nbsp;wa_sign,&nbsp;wa_prjmapp,<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;wa_t001,wa_prctr.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;ENDLOOP.<br />
+&nbsp;&nbsp;ENDIF.<br />
+   </div>
+   <div class="codeComment">
+*&nbsp;&nbsp;IF&nbsp;s_sign1&nbsp;IS&nbsp;NOT&nbsp;INITIAL&nbsp;AND&nbsp;s_sign2&nbsp;IS&nbsp;NOT&nbsp;INITIAL.<br />
+*&nbsp;&nbsp;&nbsp;&nbsp;DELETE&nbsp;it_final&nbsp;WHERE&nbsp;sign1&nbsp;NOT&nbsp;IN&nbsp;s_sign1&nbsp;OR&nbsp;sign2&nbsp;NOT&nbsp;IN&nbsp;s_sign2.<br />
+*&nbsp;&nbsp;ELSEIF&nbsp;s_sign1&nbsp;IS&nbsp;NOT&nbsp;INITIAL.<br />
+*&nbsp;&nbsp;&nbsp;&nbsp;DELETE&nbsp;it_final&nbsp;WHERE&nbsp;sign1&nbsp;NOT&nbsp;IN&nbsp;s_sign1.<br />
+*&nbsp;&nbsp;ELSEIF&nbsp;s_sign2&nbsp;IS&nbsp;NOT&nbsp;INITIAL.<br />
+*&nbsp;&nbsp;&nbsp;&nbsp;DELETE&nbsp;it_final&nbsp;WHERE&nbsp;sign2&nbsp;NOT&nbsp;IN&nbsp;s_sign2.<br />
+*&nbsp;&nbsp;ENDIF.<br />
+<br />
+*&nbsp;&nbsp;IF&nbsp;s_sign&nbsp;IS&nbsp;NOT&nbsp;INITIAL..<br />
+*&nbsp;&nbsp;&nbsp;&nbsp;DELETE&nbsp;it_final&nbsp;WHERE&nbsp;uname&nbsp;NOT&nbsp;IN&nbsp;s_sign.<br />
+*&nbsp;&nbsp;ENDIF.<br />
+<br />
+   </div>
+   <div class="code">
+&nbsp;&nbsp;IF&nbsp;s_hbkid&nbsp;IS&nbsp;NOT&nbsp;INITIAL.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;DELETE&nbsp;it_final&nbsp;WHERE&nbsp;hbkid&nbsp;NOT&nbsp;IN&nbsp;s_hbkid.<br />
+&nbsp;&nbsp;ENDIF.<br />
+ENDFORM.                    " PROCESS_DATA<br />
+<br />
+   </div>
+   <div class="codeComment">
+*&---------------------------------------------------------------------*<br />
+*&&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Form&nbsp;&nbsp;fieldcatalog<br />
+*&---------------------------------------------------------------------*<br />
+*&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;text<br />
+*----------------------------------------------------------------------*<br />
+   </div>
+   <div class="code">
+FORM fieldcatalog .<br />
+&nbsp;&nbsp;CLEAR&nbsp;wa_fcat.<br />
+&nbsp;&nbsp;wa_fcat-fieldname&nbsp;&nbsp;=&nbsp;'BUKRS'.<br />
+&nbsp;&nbsp;wa_fcat-seltext_s&nbsp;&nbsp;=&nbsp;'Co.&nbsp;Code'.<br />
+&nbsp;&nbsp;wa_fcat-seltext_m&nbsp;&nbsp;=&nbsp;'Comp.&nbsp;Code'.<br />
+&nbsp;&nbsp;wa_fcat-seltext_l&nbsp;&nbsp;=&nbsp;'Company&nbsp;Code'.<br />
+&nbsp;&nbsp;wa_fcat-outputlen&nbsp;=&nbsp;10.<br />
+&nbsp;&nbsp;wa_fcat-tabname&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;'IT_FINAL'.<br />
+&nbsp;&nbsp;APPEND&nbsp;wa_fcat&nbsp;TO&nbsp;it_fcat.<br />
+<br />
+&nbsp;&nbsp;CLEAR&nbsp;wa_fcat.<br />
+&nbsp;&nbsp;wa_fcat-fieldname&nbsp;&nbsp;=&nbsp;'BUTXT'.<br />
+&nbsp;&nbsp;wa_fcat-seltext_s&nbsp;&nbsp;=&nbsp;'Comp.&nbsp;Name'.<br />
+&nbsp;&nbsp;wa_fcat-seltext_m&nbsp;&nbsp;=&nbsp;'Comp.&nbsp;Name'.<br />
+&nbsp;&nbsp;wa_fcat-seltext_l&nbsp;&nbsp;=&nbsp;'Company&nbsp;Name'.<br />
+&nbsp;&nbsp;wa_fcat-outputlen&nbsp;=&nbsp;10.<br />
+&nbsp;&nbsp;wa_fcat-tabname&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;'IT_FINAL'.<br />
+&nbsp;&nbsp;APPEND&nbsp;wa_fcat&nbsp;TO&nbsp;it_fcat.<br />
+<br />
+&nbsp;&nbsp;CLEAR&nbsp;wa_fcat.<br />
+&nbsp;&nbsp;wa_fcat-fieldname&nbsp;&nbsp;=&nbsp;'PRCTR'.<br />
+&nbsp;&nbsp;wa_fcat-seltext_s&nbsp;&nbsp;=&nbsp;'Pr.&nbsp;Cntr'.<br />
+&nbsp;&nbsp;wa_fcat-seltext_m&nbsp;&nbsp;=&nbsp;'Profit&nbsp;Center'.<br />
+&nbsp;&nbsp;wa_fcat-seltext_l&nbsp;&nbsp;=&nbsp;'Profit&nbsp;Center'.<br />
+&nbsp;&nbsp;wa_fcat-outputlen&nbsp;=&nbsp;12.<br />
+&nbsp;&nbsp;wa_fcat-tabname&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;'IT_FINAL'.<br />
+&nbsp;&nbsp;APPEND&nbsp;wa_fcat&nbsp;TO&nbsp;it_fcat.<br />
+<br />
+&nbsp;&nbsp;CLEAR&nbsp;wa_fcat.<br />
+&nbsp;&nbsp;wa_fcat-fieldname&nbsp;&nbsp;=&nbsp;'LTEXT'.<br />
+&nbsp;&nbsp;wa_fcat-seltext_s&nbsp;&nbsp;=&nbsp;'Long&nbsp;Text'.<br />
+&nbsp;&nbsp;wa_fcat-seltext_m&nbsp;&nbsp;=&nbsp;'Long&nbsp;Text'.<br />
+&nbsp;&nbsp;wa_fcat-seltext_l&nbsp;&nbsp;=&nbsp;'Long&nbsp;Text'.<br />
+&nbsp;&nbsp;wa_fcat-outputlen&nbsp;=&nbsp;25.<br />
+&nbsp;&nbsp;wa_fcat-tabname&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;'IT_FINAL'.<br />
+&nbsp;&nbsp;APPEND&nbsp;wa_fcat&nbsp;TO&nbsp;it_fcat.<br />
+<br />
+&nbsp;&nbsp;CLEAR&nbsp;wa_fcat.<br />
+&nbsp;&nbsp;wa_fcat-fieldname&nbsp;&nbsp;=&nbsp;'PROJECT'.<br />
+&nbsp;&nbsp;wa_fcat-seltext_s&nbsp;&nbsp;=&nbsp;'Project'.<br />
+&nbsp;&nbsp;wa_fcat-seltext_m&nbsp;&nbsp;=&nbsp;'Project'.<br />
+&nbsp;&nbsp;wa_fcat-seltext_l&nbsp;&nbsp;=&nbsp;'Project'.<br />
+&nbsp;&nbsp;wa_fcat-tabname&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;'IT_FINAL'.<br />
+&nbsp;&nbsp;APPEND&nbsp;wa_fcat&nbsp;TO&nbsp;it_fcat.<br />
+<br />
+&nbsp;&nbsp;CLEAR&nbsp;wa_fcat.<br />
+&nbsp;&nbsp;wa_fcat-fieldname&nbsp;&nbsp;=&nbsp;'PR_DESC'.<br />
+&nbsp;&nbsp;wa_fcat-seltext_s&nbsp;&nbsp;=&nbsp;'PR&nbsp;Desc.'.<br />
+&nbsp;&nbsp;wa_fcat-seltext_m&nbsp;&nbsp;=&nbsp;'Project&nbsp;Desc.'.<br />
+&nbsp;&nbsp;wa_fcat-seltext_l&nbsp;&nbsp;=&nbsp;'Project&nbsp;Description'.<br />
+&nbsp;&nbsp;wa_fcat-outputlen&nbsp;=&nbsp;30.<br />
+&nbsp;&nbsp;wa_fcat-tabname&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;'IT_FINAL'.<br />
+&nbsp;&nbsp;APPEND&nbsp;wa_fcat&nbsp;TO&nbsp;it_fcat.<br />
+<br />
+&nbsp;&nbsp;CLEAR&nbsp;wa_fcat.<br />
+&nbsp;&nbsp;wa_fcat-fieldname&nbsp;&nbsp;=&nbsp;'LCODE'.<br />
+&nbsp;&nbsp;wa_fcat-seltext_s&nbsp;&nbsp;=&nbsp;'Control&nbsp;Loc.'.<br />
+&nbsp;&nbsp;wa_fcat-seltext_m&nbsp;&nbsp;=&nbsp;'Control&nbsp;Location'.<br />
+&nbsp;&nbsp;wa_fcat-seltext_l&nbsp;&nbsp;=&nbsp;'Control&nbsp;Location'.<br />
+&nbsp;&nbsp;wa_fcat-tabname&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;'IT_FINAL'.<br />
+&nbsp;&nbsp;APPEND&nbsp;wa_fcat&nbsp;TO&nbsp;it_fcat.<br />
+<br />
+&nbsp;&nbsp;CLEAR&nbsp;wa_fcat.<br />
+&nbsp;&nbsp;wa_fcat-fieldname&nbsp;&nbsp;=&nbsp;'LDESC'.<br />
+&nbsp;&nbsp;wa_fcat-seltext_s&nbsp;&nbsp;=&nbsp;'Control&nbsp;Loc.&nbsp;Desc.'.<br />
+&nbsp;&nbsp;wa_fcat-seltext_m&nbsp;&nbsp;=&nbsp;'Control&nbsp;Loc.&nbsp;Desc.'.<br />
+&nbsp;&nbsp;wa_fcat-seltext_l&nbsp;&nbsp;=&nbsp;'Control&nbsp;Loc.&nbsp;Desc.'.<br />
+&nbsp;&nbsp;wa_fcat-outputlen&nbsp;=&nbsp;30.<br />
+&nbsp;&nbsp;wa_fcat-tabname&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;'IT_FINAL'.<br />
+&nbsp;&nbsp;APPEND&nbsp;wa_fcat&nbsp;TO&nbsp;it_fcat.<br />
+<br />
+&nbsp;&nbsp;CLEAR&nbsp;wa_fcat.<br />
+&nbsp;&nbsp;wa_fcat-fieldname&nbsp;&nbsp;=&nbsp;'HBKID'.<br />
+&nbsp;&nbsp;wa_fcat-seltext_s&nbsp;&nbsp;=&nbsp;'House&nbsp;Bank'.<br />
+&nbsp;&nbsp;wa_fcat-seltext_m&nbsp;&nbsp;=&nbsp;'House&nbsp;Bank'.<br />
+&nbsp;&nbsp;wa_fcat-seltext_l&nbsp;&nbsp;=&nbsp;'House&nbsp;Bank'.<br />
+&nbsp;&nbsp;wa_fcat-outputlen&nbsp;=&nbsp;20.<br />
+&nbsp;&nbsp;wa_fcat-tabname&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;'IT_FINAL'.<br />
+&nbsp;&nbsp;APPEND&nbsp;wa_fcat&nbsp;TO&nbsp;it_fcat.<br />
+<br />
+&nbsp;&nbsp;CLEAR&nbsp;wa_fcat.<br />
+&nbsp;&nbsp;wa_fcat-fieldname&nbsp;&nbsp;=&nbsp;'BANKL'.<br />
+&nbsp;&nbsp;wa_fcat-seltext_s&nbsp;&nbsp;=&nbsp;'Bank&nbsp;Key'.<br />
+&nbsp;&nbsp;wa_fcat-seltext_m&nbsp;&nbsp;=&nbsp;'Bank&nbsp;Key'.<br />
+&nbsp;&nbsp;wa_fcat-seltext_l&nbsp;&nbsp;=&nbsp;'Bank&nbsp;Key'.<br />
+&nbsp;&nbsp;wa_fcat-outputlen&nbsp;=&nbsp;20.<br />
+&nbsp;&nbsp;wa_fcat-tabname&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;'IT_FINAL'.<br />
+&nbsp;&nbsp;APPEND&nbsp;wa_fcat&nbsp;TO&nbsp;it_fcat.<br />
+<br />
+&nbsp;&nbsp;CLEAR&nbsp;wa_fcat.<br />
+&nbsp;&nbsp;wa_fcat-fieldname&nbsp;&nbsp;=&nbsp;'SIGN1'.<br />
+&nbsp;&nbsp;wa_fcat-seltext_s&nbsp;&nbsp;=&nbsp;'Signatory&nbsp;1&nbsp;ID'.<br />
+&nbsp;&nbsp;wa_fcat-seltext_m&nbsp;&nbsp;=&nbsp;'Signatory&nbsp;1&nbsp;ID'.<br />
+&nbsp;&nbsp;wa_fcat-seltext_l&nbsp;&nbsp;=&nbsp;'Signatory&nbsp;1&nbsp;ID'.<br />
+&nbsp;&nbsp;wa_fcat-outputlen&nbsp;=&nbsp;20.<br />
+&nbsp;&nbsp;wa_fcat-tabname&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;'IT_FINAL'.<br />
+&nbsp;&nbsp;APPEND&nbsp;wa_fcat&nbsp;TO&nbsp;it_fcat.<br />
+<br />
+&nbsp;&nbsp;CLEAR&nbsp;wa_fcat.<br />
+&nbsp;&nbsp;wa_fcat-fieldname&nbsp;&nbsp;=&nbsp;'SIG1N'.<br />
+&nbsp;&nbsp;wa_fcat-seltext_s&nbsp;&nbsp;=&nbsp;'Signatory&nbsp;1&nbsp;Name'.<br />
+&nbsp;&nbsp;wa_fcat-seltext_m&nbsp;&nbsp;=&nbsp;'Signatory&nbsp;1&nbsp;Name'.<br />
+&nbsp;&nbsp;wa_fcat-seltext_l&nbsp;&nbsp;=&nbsp;'Signatory&nbsp;1&nbsp;Name'.<br />
+&nbsp;&nbsp;wa_fcat-outputlen&nbsp;=&nbsp;20.<br />
+&nbsp;&nbsp;wa_fcat-tabname&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;'IT_FINAL'.<br />
+&nbsp;&nbsp;APPEND&nbsp;wa_fcat&nbsp;TO&nbsp;it_fcat.<br />
+<br />
+&nbsp;&nbsp;CLEAR&nbsp;wa_fcat.<br />
+&nbsp;&nbsp;wa_fcat-fieldname&nbsp;&nbsp;=&nbsp;'SIG1E'.<br />
+&nbsp;&nbsp;wa_fcat-seltext_s&nbsp;&nbsp;=&nbsp;'Signatory&nbsp;1&nbsp;Email'.<br />
+&nbsp;&nbsp;wa_fcat-seltext_m&nbsp;&nbsp;=&nbsp;'Signatory&nbsp;1&nbsp;Email'.<br />
+&nbsp;&nbsp;wa_fcat-seltext_l&nbsp;&nbsp;=&nbsp;'Signatory&nbsp;1&nbsp;Email'.<br />
+&nbsp;&nbsp;wa_fcat-outputlen&nbsp;=&nbsp;20.<br />
+&nbsp;&nbsp;wa_fcat-tabname&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;'IT_FINAL'.<br />
+&nbsp;&nbsp;APPEND&nbsp;wa_fcat&nbsp;TO&nbsp;it_fcat.<br />
+<br />
+&nbsp;&nbsp;CLEAR&nbsp;wa_fcat.<br />
+&nbsp;&nbsp;wa_fcat-fieldname&nbsp;&nbsp;=&nbsp;'SIGN2'.<br />
+&nbsp;&nbsp;wa_fcat-seltext_s&nbsp;&nbsp;=&nbsp;'Signatory&nbsp;2&nbsp;ID'.<br />
+&nbsp;&nbsp;wa_fcat-seltext_m&nbsp;&nbsp;=&nbsp;'Signatory&nbsp;2&nbsp;ID'.<br />
+&nbsp;&nbsp;wa_fcat-seltext_l&nbsp;&nbsp;=&nbsp;'Signatory&nbsp;2&nbsp;ID'.<br />
+&nbsp;&nbsp;wa_fcat-outputlen&nbsp;=&nbsp;20.<br />
+&nbsp;&nbsp;wa_fcat-tabname&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;'IT_FINAL'.<br />
+&nbsp;&nbsp;APPEND&nbsp;wa_fcat&nbsp;TO&nbsp;it_fcat.<br />
+<br />
+&nbsp;&nbsp;CLEAR&nbsp;wa_fcat.<br />
+&nbsp;&nbsp;wa_fcat-fieldname&nbsp;&nbsp;=&nbsp;'SIG2N'.<br />
+&nbsp;&nbsp;wa_fcat-seltext_s&nbsp;&nbsp;=&nbsp;'Signatory&nbsp;2&nbsp;Name'.<br />
+&nbsp;&nbsp;wa_fcat-seltext_m&nbsp;&nbsp;=&nbsp;'Signatory&nbsp;2&nbsp;Name'.<br />
+&nbsp;&nbsp;wa_fcat-seltext_l&nbsp;&nbsp;=&nbsp;'Signatory&nbsp;2&nbsp;Name'.<br />
+&nbsp;&nbsp;wa_fcat-outputlen&nbsp;=&nbsp;20.<br />
+&nbsp;&nbsp;wa_fcat-tabname&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;'IT_FINAL'.<br />
+&nbsp;&nbsp;APPEND&nbsp;wa_fcat&nbsp;TO&nbsp;it_fcat.<br />
+<br />
+&nbsp;&nbsp;CLEAR&nbsp;wa_fcat.<br />
+&nbsp;&nbsp;wa_fcat-fieldname&nbsp;&nbsp;=&nbsp;'SIG2E'.<br />
+&nbsp;&nbsp;wa_fcat-seltext_s&nbsp;&nbsp;=&nbsp;'Signatory&nbsp;2&nbsp;Email'.<br />
+&nbsp;&nbsp;wa_fcat-seltext_m&nbsp;&nbsp;=&nbsp;'Signatory&nbsp;2&nbsp;Email'.<br />
+&nbsp;&nbsp;wa_fcat-seltext_l&nbsp;&nbsp;=&nbsp;'Signatory&nbsp;2&nbsp;Email'.<br />
+&nbsp;&nbsp;wa_fcat-outputlen&nbsp;=&nbsp;20.<br />
+&nbsp;&nbsp;wa_fcat-tabname&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;'IT_FINAL'.<br />
+&nbsp;&nbsp;APPEND&nbsp;wa_fcat&nbsp;TO&nbsp;it_fcat.<br />
+<br />
+&nbsp;&nbsp;CLEAR&nbsp;wa_fcat.<br />
+&nbsp;&nbsp;wa_fcat-fieldname&nbsp;&nbsp;=&nbsp;'DATAB'.<br />
+&nbsp;&nbsp;wa_fcat-seltext_s&nbsp;&nbsp;=&nbsp;'Valid&nbsp;From'.<br />
+&nbsp;&nbsp;wa_fcat-seltext_m&nbsp;&nbsp;=&nbsp;'Valid&nbsp;From'.<br />
+&nbsp;&nbsp;wa_fcat-seltext_l&nbsp;&nbsp;=&nbsp;'Valid&nbsp;From'.<br />
+&nbsp;&nbsp;wa_fcat-outputlen&nbsp;=&nbsp;20.<br />
+&nbsp;&nbsp;wa_fcat-tabname&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;'IT_FINAL'.<br />
+&nbsp;&nbsp;APPEND&nbsp;wa_fcat&nbsp;TO&nbsp;it_fcat.<br />
+<br />
+&nbsp;&nbsp;CLEAR&nbsp;wa_fcat.<br />
+&nbsp;&nbsp;wa_fcat-fieldname&nbsp;&nbsp;=&nbsp;'DATBI'.<br />
+&nbsp;&nbsp;wa_fcat-seltext_s&nbsp;&nbsp;=&nbsp;'Valid&nbsp;To'.<br />
+&nbsp;&nbsp;wa_fcat-seltext_m&nbsp;&nbsp;=&nbsp;'Valid&nbsp;To'.<br />
+&nbsp;&nbsp;wa_fcat-seltext_l&nbsp;&nbsp;=&nbsp;'Valid&nbsp;To'.<br />
+&nbsp;&nbsp;wa_fcat-outputlen&nbsp;=&nbsp;20.<br />
+&nbsp;&nbsp;wa_fcat-tabname&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;'IT_FINAL'.<br />
+&nbsp;&nbsp;APPEND&nbsp;wa_fcat&nbsp;TO&nbsp;it_fcat.<br />
+ENDFORM.                    " FIELDCATALOG<br />
+<br />
+   </div>
+   <div class="codeComment">
+*&---------------------------------------------------------------------*<br />
+*&&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Form&nbsp;&nbsp;DISPLAY<br />
+*&---------------------------------------------------------------------*<br />
+*&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;text<br />
+*----------------------------------------------------------------------*<br />
+*&nbsp;&nbsp;--&gt;&nbsp;&nbsp;p1&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;text<br />
+*&nbsp;&nbsp;&lt;--&nbsp;&nbsp;p2&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;text<br />
+*----------------------------------------------------------------------*<br />
+   </div>
+   <div class="code">
+FORM display .<br />
+&nbsp;&nbsp;CALL&nbsp;FUNCTION&nbsp;'REUSE_ALV_GRID_DISPLAY'<br />
+&nbsp;&nbsp;&nbsp;&nbsp;EXPORTING<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;i_callback_program&nbsp;=&nbsp;sy-repid<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;it_fieldcat&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;it_fcat<br />
+&nbsp;&nbsp;&nbsp;&nbsp;TABLES<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;t_outtab&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;it_final.<br />
+ENDFORM.                    " DISPLAY<br />
+<br />
+<br />
+   </div>
+   <div class="codeComment">
+*Selection&nbsp;texts<br />
+*----------------------------------------------------------<br />
+*&nbsp;P_REPDT&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Report&nbsp;as&nbsp;on<br />
+*&nbsp;S_BUKRS&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Company&nbsp;Code<br />
+*&nbsp;S_HBKID&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;House&nbsp;Bank<br />
+*&nbsp;S_PRCTR&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Profit&nbsp;Center<br />
+*&nbsp;S_PRJ&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Project<br />
+*&nbsp;S_SIGN&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Signatory<br />
+            </div>
+          </td>
+        </tr>
+      </table>
+      </td>
+      </tr>
+   <tr>
+<td class="footer">Extracted by Mass Download version 1.4.1 - E.G.Mellodew. 1998-2019. Sap Release 731</td>
+   </tr>
+</table>
+</body>
+</html>

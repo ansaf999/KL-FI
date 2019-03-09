@@ -1,0 +1,1064 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.1//EN" "http://www.w3.org/TR/xhtml11/DTD/xhtml11.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="application/xhtml+xml; charset=ISO-8859-1" />
+<title>ZFIR0235_VENDOR_ONLINE_MASTER</title>
+<style type="text/css">
+.code{ font-family:"Courier New", Courier, monospace; color:#000; font-size:14px; background-color:#F2F4F7 }
+  .codeComment {font-family:"Courier New", Courier, monospace; color:#0000F0; font-size:14px; background-color:#F2F4F7 }
+  .normalBold{ font-family:Arial, Helvetica, sans-serif; color:#000; font-size:12px; font-weight:800 }
+  .normalBoldLarge{ font-family:Arial, Helvetica, sans-serif; color:#000; font-size:16px; font-weight:800 }
+</style>
+<style type="text/css">
+  .normal{ font-family:Arial, Helvetica, sans-serif; color:#000; font-size:12px }
+  .footer{ font-family:Arial, Helvetica, sans-serif; color:#000; font-size:12px; text-align: center }
+  h2{ font-family:Arial, Helvetica, sans-serif; color:#000; font-size:16px; font-weight:800 }
+  h3{ font-family:Arial, Helvetica, sans-serif; color:#000; font-size:14px; font-weight:800 }
+  .outerTable{
+   background-color:#E0E7ED;
+   width:100%;
+   border-top-width: thin;
+   border-right-width: thin;
+   border-right-width: thin;
+   border-left-width: thin;
+   border-top-style: solid;
+   border-right-style: solid;
+   border-bottom-style: solid;
+   border-left-style: solid;
+  }
+  .innerTable{
+   background-color:#F2F4F7;
+   width:100%;
+   border-top-width: thin;
+   border-right-width: thin;
+   border-bottom-width: thin;
+   border-left-width: thin;
+   border-top-style: solid;
+   border-right-style: solid;
+   border-bottom-style: solid;
+   border-left-style: solid;
+  }
+</style>
+</head>
+<body>
+<table class="outerTable">
+  <tr class="normalBoldLarge">
+     <td><h2>Code listing for: ZFIR0235_VENDOR_ONLINE_MASTER</h2>
+<h3> Description: Vendor Online Payment Master Data Maintainance</h3></td>
+   </tr>
+  <tr>
+     <td>
+     <table class="innerTable">
+       <tr>
+          <td>
+   <div class="codeComment">
+*&---------------------------------------------------------------------*<br />
+*&&nbsp;Report&nbsp;&nbsp;ZFIR0235_VENDOR_ONLINE_MASTER<br />
+*&<br />
+*&---------------------------------------------------------------------*<br />
+*&<br />
+*&<br />
+*&---------------------------------------------------------------------*<br />
+   </div>
+   <div class="code">
+REPORT zfir0235_vendor_online_master.<br />
+<br />
+TYPES: BEGIN OF gty_clust,<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;srno&nbsp;&nbsp;&nbsp;&nbsp;TYPE&nbsp;char5,<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;project&nbsp;TYPE&nbsp;zprjmapp,<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;datab&nbsp;&nbsp;&nbsp;TYPE&nbsp;datab,<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;datbi&nbsp;&nbsp;&nbsp;TYPE&nbsp;datbi,<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;bname&nbsp;&nbsp;&nbsp;TYPE&nbsp;xubname,<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;aname&nbsp;&nbsp;&nbsp;TYPE&nbsp;xuaname,<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;pr_desc&nbsp;TYPE&nbsp;zpr_desc,<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;xdel,<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;END&nbsp;OF&nbsp;gty_clust.<br />
+<br />
+DATA: gv_srno TYPE char5,<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;lv_msg1&nbsp;TYPE&nbsp;char70,<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;lv_msg2&nbsp;TYPE&nbsp;char70,<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;lv_msg3&nbsp;TYPE&nbsp;char70.<br />
+<br />
+DATA: gt_clust   TYPE TABLE OF gty_clust,<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;gt_clust_t&nbsp;TYPE&nbsp;TABLE&nbsp;OF&nbsp;gty_clust,<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;gs_clust&nbsp;&nbsp;&nbsp;TYPE&nbsp;gty_clust,<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;gs_clust_t&nbsp;TYPE&nbsp;gty_clust.<br />
+<br />
+FIELD-SYMBOLS: &lt;fs_clust&gt; TYPE gty_clust.<br />
+<br />
+DATA : gs_fcat   TYPE slis_fieldcat_alv,          "ALV Declaration<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;gt_fcat1&nbsp;&nbsp;TYPE&nbsp;slis_t_fieldcat_alv,<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;gs_layout&nbsp;TYPE&nbsp;slis_layout_alv,<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;gv_title&nbsp;&nbsp;TYPE&nbsp;lvc_title.<br />
+<br />
+   </div>
+   <div class="codeComment">
+***&nbsp;data&nbsp;declaration&nbsp;for&nbsp;alv&nbsp;output<br />
+   </div>
+   <div class="code">
+DATA : gw_layout        TYPE lvc_s_layo,<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;gw_grid_settings&nbsp;TYPE&nbsp;lvc_s_glay,<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;gt_fcat&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;TYPE&nbsp;lvc_t_fcat,<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;gw_fcat&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;TYPE&nbsp;lvc_s_fcat,<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;gt_events&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;TYPE&nbsp;slis_t_event,<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;gw_events&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;TYPE&nbsp;slis_alv_event,<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;gv_variant&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;TYPE&nbsp;disvariant.<br />
+<br />
+DATA: gt_sort TYPE lvc_t_sort,<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;gwa_sort&nbsp;TYPE&nbsp;lvc_s_sort.<br />
+<br />
+data: wa_prjmapp type zfi_prjmapp.<br />
+<br />
+   </div>
+   <div class="codeComment">
+*&nbsp;Constants&nbsp;for&nbsp;ALV<br />
+   </div>
+   <div class="code">
+CONSTANTS: gc_x TYPE c VALUE 'X'.<br />
+<br />
+DATA: e_grid TYPE REF TO cl_gui_alv_grid.<br />
+DATA: lr_data_changed TYPE REF TO cl_alv_changed_data_protocol.<br />
+<br />
+SELECTION-SCREEN: BEGIN OF BLOCK b1 WITH FRAME TITLE text-001.<br />
+PARAMETERS : p_master   RADIOBUTTON GROUP g1 USER-COMMAND aaa DEFAULT 'X',<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;p_log&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;RADIOBUTTON&nbsp;GROUP&nbsp;g1&nbsp;,<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;p_mrep&nbsp;&nbsp;&nbsp;RADIOBUTTON&nbsp;GROUP&nbsp;g1.<br />
+<br />
+SELECTION-SCREEN SKIP.<br />
+<br />
+SELECTION-SCREEN: BEGIN OF BLOCK b2 WITH FRAME TITLE text-002.<br />
+PARAMETERS : p_auth   RADIOBUTTON GROUP g2 MODIF ID xxx,<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;p_prjmsr&nbsp;RADIOBUTTON&nbsp;GROUP&nbsp;g2&nbsp;MODIF&nbsp;ID&nbsp;xxx,<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;p_prjact&nbsp;RADIOBUTTON&nbsp;GROUP&nbsp;g2&nbsp;MODIF&nbsp;ID&nbsp;xxx,<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;p_dnprct&nbsp;RADIOBUTTON&nbsp;GROUP&nbsp;g2&nbsp;MODIF&nbsp;ID&nbsp;xxx,<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;p_dept&nbsp;&nbsp;&nbsp;RADIOBUTTON&nbsp;GROUP&nbsp;g2&nbsp;MODIF&nbsp;ID&nbsp;xxx,<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;p_prjdpt&nbsp;RADIOBUTTON&nbsp;GROUP&nbsp;g2&nbsp;MODIF&nbsp;ID&nbsp;xxx,<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;p_prjbnk&nbsp;RADIOBUTTON&nbsp;GROUP&nbsp;g2&nbsp;MODIF&nbsp;ID&nbsp;xxx,<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;p_bnkgrp&nbsp;RADIOBUTTON&nbsp;GROUP&nbsp;g2&nbsp;MODIF&nbsp;ID&nbsp;xxx,<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;p_sign&nbsp;&nbsp;&nbsp;RADIOBUTTON&nbsp;GROUP&nbsp;g2&nbsp;MODIF&nbsp;ID&nbsp;xxx,<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;p_mngr&nbsp;&nbsp;&nbsp;RADIOBUTTON&nbsp;GROUP&nbsp;G2&nbsp;MODIF&nbsp;ID&nbsp;xxx,<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;p_ekgrp&nbsp;&nbsp;RADIOBUTTON&nbsp;GROUP&nbsp;g2&nbsp;MODIF&nbsp;ID&nbsp;xxx.<br />
+   </div>
+   <div class="codeComment">
+*&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;p_clust&nbsp;&nbsp;RADIOBUTTON&nbsp;GROUP&nbsp;g2&nbsp;MODIF&nbsp;ID&nbsp;xxx.<br />
+<br />
+   </div>
+   <div class="code">
+SELECTION-SCREEN END OF BLOCK b2.<br />
+<br />
+SELECTION-SCREEN: BEGIN OF BLOCK b3 WITH FRAME TITLE text-003.<br />
+PARAMETERS : p_prdpl  RADIOBUTTON GROUP g3 MODIF ID yyy,<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;p_clustl&nbsp;RADIOBUTTON&nbsp;GROUP&nbsp;g3&nbsp;MODIF&nbsp;ID&nbsp;yyy,<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;p_app&nbsp;&nbsp;&nbsp;&nbsp;RADIOBUTTON&nbsp;GROUP&nbsp;g3&nbsp;MODIF&nbsp;ID&nbsp;yyy.<br />
+SELECTION-SCREEN END OF BLOCK b3.<br />
+SELECTION-SCREEN END OF BLOCK b1.<br />
+<br />
+AT SELECTION-SCREEN OUTPUT.<br />
+&nbsp;&nbsp;PERFORM&nbsp;modify_sel_scr.<br />
+<br />
+START-OF-SELECTION.<br />
+&nbsp;&nbsp;IF&nbsp;p_auth&nbsp;=&nbsp;'X'.&nbsp;&nbsp;&nbsp;&nbsp;"Control&nbsp;loc.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;CALL&nbsp;FUNCTION&nbsp;'VIEW_MAINTENANCE_CALL'<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;EXPORTING<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;action&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;'S'<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;view_name&nbsp;=&nbsp;'ZFI_AUTHAPP'.<br />
+<br />
+&nbsp;&nbsp;ELSEIF&nbsp;p_prjmsr&nbsp;=&nbsp;'X'.&nbsp;&nbsp;&nbsp;"Project&nbsp;Master<br />
+&nbsp;&nbsp;&nbsp;&nbsp;CALL&nbsp;FUNCTION&nbsp;'VIEW_MAINTENANCE_CALL'<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;EXPORTING<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;action&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;'S'<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;view_name&nbsp;=&nbsp;'ZFI_PRJMAPP'.<br />
+<br />
+   </div>
+   <div class="codeComment">
+*&nbsp;&nbsp;ELSEIF&nbsp;p_clust&nbsp;=&nbsp;'X'.&nbsp;&nbsp;"Cluster&nbsp;Head<br />
+*&nbsp;&nbsp;&nbsp;&nbsp;PERFORM&nbsp;cluster_head.<br />
+<br />
+   </div>
+   <div class="code">
+&nbsp;&nbsp;ELSEIF&nbsp;p_dept&nbsp;=&nbsp;'X'.&nbsp;&nbsp;&nbsp;"Department&nbsp;Master<br />
+&nbsp;&nbsp;&nbsp;&nbsp;CALL&nbsp;FUNCTION&nbsp;'VIEW_MAINTENANCE_CALL'<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;EXPORTING<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;action&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;'S'<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;view_name&nbsp;=&nbsp;'ZFI_DEPTZAPP'.<br />
+<br />
+&nbsp;&nbsp;ELSEIF&nbsp;p_prjbnk&nbsp;=&nbsp;'X'.&nbsp;"Project&nbsp;to&nbsp;Bank<br />
+&nbsp;&nbsp;&nbsp;&nbsp;CALL&nbsp;FUNCTION&nbsp;'VIEW_MAINTENANCE_CALL'<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;EXPORTING<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;action&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;'S'<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;view_name&nbsp;=&nbsp;'ZFI_PRJBNKZAPP'.<br />
+<br />
+&nbsp;&nbsp;ELSEIF&nbsp;p_sign&nbsp;=&nbsp;'X'.&nbsp;"Singatory<br />
+&nbsp;&nbsp;&nbsp;&nbsp;CALL&nbsp;FUNCTION&nbsp;'VIEW_MAINTENANCE_CALL'<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;EXPORTING<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;action&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;'S'<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;view_name&nbsp;=&nbsp;'ZFI_SIGNZAPP'.<br />
+<br />
+&nbsp;&nbsp;ELSEIF&nbsp;p_prjdpt&nbsp;=&nbsp;'X'.&nbsp;&nbsp;"Project&nbsp;to&nbsp;Department<br />
+&nbsp;&nbsp;&nbsp;&nbsp;CALL&nbsp;FUNCTION&nbsp;'VIEW_MAINTENANCE_CALL'<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;EXPORTING<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;action&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;'S'<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;view_name&nbsp;=&nbsp;'ZFI_PRJDEPT'.<br />
+<br />
+&nbsp;&nbsp;ELSEIF&nbsp;p_dnprct&nbsp;=&nbsp;'X'.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;PERFORM&nbsp;pc_approval.<br />
+<br />
+&nbsp;&nbsp;ELSEIF&nbsp;p_prdpl&nbsp;=&nbsp;'X'.&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;"Project&nbsp;to&nbsp;Department&nbsp;log<br />
+&nbsp;&nbsp;&nbsp;&nbsp;PERFORM&nbsp;prj_dept_log.<br />
+<br />
+&nbsp;&nbsp;ELSEIF&nbsp;p_clustl&nbsp;=&nbsp;'X'.&nbsp;&nbsp;&nbsp;&nbsp;"Cluster&nbsp;Head&nbsp;Log<br />
+&nbsp;&nbsp;&nbsp;&nbsp;PERFORM&nbsp;cluster_head_log.<br />
+<br />
+&nbsp;&nbsp;ELSEIF&nbsp;p_app&nbsp;=&nbsp;'X'.&nbsp;&nbsp;&nbsp;&nbsp;"Payment&nbsp;Data<br />
+&nbsp;&nbsp;&nbsp;&nbsp;PERFORM&nbsp;doc_app_log.<br />
+<br />
+&nbsp;&nbsp;ELSEIF&nbsp;p_prjact&nbsp;=&nbsp;'X'.&nbsp;&nbsp;"Project&nbsp;Activation<br />
+&nbsp;&nbsp;CALL&nbsp;FUNCTION&nbsp;'VIEW_MAINTENANCE_CALL'<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;EXPORTING<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;action&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;'S'<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;view_name&nbsp;=&nbsp;'ZFI_PRJACT'.<br />
+<br />
+&nbsp;&nbsp;ELSEIF&nbsp;p_bnkgrp&nbsp;=&nbsp;'X'.<br />
+<br />
+&nbsp;&nbsp;&nbsp;CALL&nbsp;FUNCTION&nbsp;'VIEW_MAINTENANCE_CALL'<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;EXPORTING<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;action&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;'S'<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;view_name&nbsp;=&nbsp;'ZFI_BNKGRPACT'.<br />
+<br />
+&nbsp;&nbsp;ELSEIF&nbsp;&nbsp;p_mngr&nbsp;=&nbsp;'X'.<br />
+&nbsp;&nbsp;CALL&nbsp;FUNCTION&nbsp;'VIEW_MAINTENANCE_CALL'<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;EXPORTING<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;action&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;'S'<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;view_name&nbsp;=&nbsp;'ZFI_VOPMNGR'.<br />
+<br />
+&nbsp;&nbsp;ELSEIF&nbsp;p_mrep&nbsp;=&nbsp;'X'.<br />
+&nbsp;&nbsp;CALL&nbsp;TRANSACTION&nbsp;'ZFI_VOP_MREP'.<br />
+&nbsp;&nbsp;ELSEIF&nbsp;P_EKGRP&nbsp;=&nbsp;'X'.<br />
+&nbsp;&nbsp;CALL&nbsp;&nbsp;TRANSACTION&nbsp;'ZFI_EKGRP'.<br />
+&nbsp;&nbsp;ENDIF.<br />
+   </div>
+   <div class="codeComment">
+*&---------------------------------------------------------------------*<br />
+*&&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Form&nbsp;&nbsp;CLUSTER_HEAD<br />
+*&---------------------------------------------------------------------*<br />
+*&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;text<br />
+*----------------------------------------------------------------------*<br />
+*&nbsp;&nbsp;--&gt;&nbsp;&nbsp;p1&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;text<br />
+*&nbsp;&nbsp;&lt;--&nbsp;&nbsp;p2&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;text<br />
+*----------------------------------------------------------------------*<br />
+   </div>
+   <div class="code">
+FORM cluster_head.<br />
+&nbsp;&nbsp;DATA:&nbsp;lt_clust&nbsp;TYPE&nbsp;TABLE&nbsp;OF&nbsp;zfi_clustzapp,<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;ls_clust&nbsp;TYPE&nbsp;zfi_clustzapp.<br />
+<br />
+&nbsp;&nbsp;SELECT&nbsp;*<br />
+&nbsp;&nbsp;&nbsp;&nbsp;FROM&nbsp;zfi_clustzapp<br />
+&nbsp;&nbsp;&nbsp;&nbsp;INTO&nbsp;TABLE&nbsp;lt_clust.<br />
+<br />
+&nbsp;&nbsp;SORT&nbsp;lt_clust&nbsp;BY&nbsp;project&nbsp;datab.<br />
+<br />
+&nbsp;&nbsp;LOOP&nbsp;AT&nbsp;lt_clust&nbsp;INTO&nbsp;ls_clust.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;MOVE-CORRESPONDING&nbsp;ls_clust&nbsp;TO&nbsp;gs_clust.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;gv_srno&nbsp;=&nbsp;gv_srno&nbsp;+&nbsp;1.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;CONDENSE&nbsp;gv_srno.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;gs_clust-srno&nbsp;=&nbsp;gv_srno.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;CONDENSE&nbsp;gs_clust-srno.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;APPEND&nbsp;gs_clust&nbsp;TO&nbsp;gt_clust.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;CLEAR:&nbsp;gs_clust,ls_clust.<br />
+&nbsp;&nbsp;ENDLOOP.<br />
+<br />
+&nbsp;&nbsp;SORT&nbsp;gt_clust&nbsp;BY&nbsp;project&nbsp;datab.<br />
+&nbsp;&nbsp;gt_clust_t[]&nbsp;=&nbsp;gt_clust[].<br />
+&nbsp;&nbsp;SORT&nbsp;gt_clust_t&nbsp;BY&nbsp;project&nbsp;datab.<br />
+<br />
+   </div>
+   <div class="codeComment">
+****Build&nbsp;Field&nbsp;Catalog<br />
+   </div>
+   <div class="code">
+&nbsp;&nbsp;PERFORM&nbsp;build_fcat:<br />
+&nbsp;&nbsp;&nbsp;&nbsp;USING&nbsp;'1'&nbsp;&nbsp;'SRNO'&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;'SR.No.'&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;CHANGING&nbsp;gt_fcat,<br />
+&nbsp;&nbsp;&nbsp;&nbsp;USING&nbsp;'1'&nbsp;&nbsp;'PROJECT'&nbsp;&nbsp;&nbsp;&nbsp;'Project'&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;CHANGING&nbsp;gt_fcat,<br />
+&nbsp;&nbsp;&nbsp;&nbsp;USING&nbsp;'2'&nbsp;&nbsp;'PR_DESC'&nbsp;&nbsp;&nbsp;&nbsp;'Project&nbsp;Desc.'&nbsp;CHANGING&nbsp;gt_fcat,<br />
+&nbsp;&nbsp;&nbsp;&nbsp;USING&nbsp;'2'&nbsp;&nbsp;'DATAB'&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;'Valid&nbsp;From'&nbsp;&nbsp;&nbsp;&nbsp;CHANGING&nbsp;gt_fcat,<br />
+&nbsp;&nbsp;&nbsp;&nbsp;USING&nbsp;'3'&nbsp;&nbsp;'DATBI'&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;'Valid&nbsp;To'&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;CHANGING&nbsp;gt_fcat,<br />
+&nbsp;&nbsp;&nbsp;&nbsp;USING&nbsp;'4'&nbsp;&nbsp;'BNAME'&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;'Cluster&nbsp;Head'&nbsp;&nbsp;CHANGING&nbsp;gt_fcat,<br />
+&nbsp;&nbsp;&nbsp;&nbsp;USING&nbsp;'5'&nbsp;&nbsp;'ANAME'&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;'Name'&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;CHANGING&nbsp;gt_fcat.<br />
+<br />
+&nbsp;&nbsp;CLEAR:&nbsp;gs_layout.<br />
+&nbsp;&nbsp;gw_layout-cwidth_opt&nbsp;=&nbsp;abap_true.<br />
+&nbsp;&nbsp;gw_layout-box_fname&nbsp;=&nbsp;'XDEL'.&nbsp;&nbsp;&nbsp;"Set&nbsp;field&nbsp;name&nbsp;to&nbsp;store&nbsp;row&nbsp;selection<br />
+<br />
+&nbsp;&nbsp;gw_grid_settings-edt_cll_cb&nbsp;=&nbsp;'X'.<br />
+<br />
+&nbsp;&nbsp;PERFORM&nbsp;register_events&nbsp;USING&nbsp;gt_events.<br />
+<br />
+&nbsp;&nbsp;CALL&nbsp;FUNCTION&nbsp;'REUSE_ALV_GRID_DISPLAY_LVC'<br />
+&nbsp;&nbsp;&nbsp;&nbsp;EXPORTING<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;i_callback_program&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;sy-repid<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;i_callback_pf_status_set&nbsp;=&nbsp;'SET_PF_STATUS'<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;i_callback_user_command&nbsp;&nbsp;=&nbsp;'USER_COMMAND'<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;i_grid_settings&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;gw_grid_settings<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;is_layout_lvc&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;gw_layout<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;it_events&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;gt_events<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;it_fieldcat_lvc&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;gt_fcat<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;i_save&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;abap_true<br />
+&nbsp;&nbsp;&nbsp;&nbsp;TABLES<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;t_outtab&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;gt_clust.<br />
+ENDFORM.                    " CLUSTER_HEAD<br />
+   </div>
+   <div class="codeComment">
+*&---------------------------------------------------------------------*<br />
+*&&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Form&nbsp;&nbsp;build_fcat<br />
+*&---------------------------------------------------------------------*<br />
+*&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;text<br />
+*----------------------------------------------------------------------*<br />
+*&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;--&gt;FP_COL&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;text<br />
+*&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;--&gt;FP_FIELD&nbsp;&nbsp;&nbsp;text<br />
+*&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;--&gt;FP_SELTEXT&nbsp;text<br />
+*&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;--&gt;FT_FCAT&nbsp;&nbsp;&nbsp;&nbsp;text<br />
+*----------------------------------------------------------------------*<br />
+   </div>
+   <div class="code">
+FORM build_fcat USING fp_col TYPE c<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;fp_field&nbsp;TYPE&nbsp;c<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;fp_seltext&nbsp;TYPE&nbsp;c<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;CHANGING&nbsp;ft_fcat&nbsp;TYPE&nbsp;STANDARD&nbsp;TABLE.<br />
+&nbsp;&nbsp;gw_fcat-col_pos&nbsp;&nbsp;&nbsp;=&nbsp;fp_col.<br />
+&nbsp;&nbsp;gw_fcat-fieldname&nbsp;=&nbsp;fp_field.<br />
+&nbsp;&nbsp;gw_fcat-seltext&nbsp;&nbsp;&nbsp;=&nbsp;fp_seltext.<br />
+&nbsp;&nbsp;gw_fcat-coltext&nbsp;&nbsp;&nbsp;=&nbsp;fp_seltext.<br />
+&nbsp;&nbsp;gw_fcat-edit&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;'X'.<br />
+<br />
+&nbsp;&nbsp;IF&nbsp;gw_fcat-fieldname&nbsp;=&nbsp;'PROJECT'.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;gw_fcat-ref_table&nbsp;&nbsp;=&nbsp;'ZFI_CLUSTZAPP'.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;gw_fcat-ref_field&nbsp;&nbsp;=&nbsp;'PROJECT'.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;gw_fcat-f4availabl&nbsp;=&nbsp;'X'.<br />
+&nbsp;&nbsp;ENDIF.<br />
+<br />
+&nbsp;&nbsp;IF&nbsp;gw_fcat-fieldname&nbsp;=&nbsp;'BNAME'.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;gw_fcat-ref_table&nbsp;&nbsp;=&nbsp;'ZFI_CLUSTZAPP'.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;gw_fcat-ref_field&nbsp;&nbsp;=&nbsp;'BNAME'.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;gw_fcat-f4availabl&nbsp;=&nbsp;'X'.<br />
+&nbsp;&nbsp;ENDIF.<br />
+<br />
+&nbsp;&nbsp;IF&nbsp;gw_fcat-fieldname&nbsp;=&nbsp;'ANAME'&nbsp;OR&nbsp;gw_fcat-fieldname&nbsp;=&nbsp;'PR_DESC'.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;CLEAR&nbsp;gw_fcat-edit.<br />
+&nbsp;&nbsp;ENDIF.<br />
+<br />
+&nbsp;&nbsp;IF&nbsp;gw_fcat-fieldname&nbsp;=&nbsp;'DATAB'&nbsp;OR&nbsp;gw_fcat-fieldname&nbsp;=&nbsp;'DATBI'.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;gw_fcat-ref_table&nbsp;&nbsp;=&nbsp;'ZFI_CLUSTZAPP'.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;gw_fcat-ref_field&nbsp;&nbsp;=&nbsp;'DATAB'.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;gw_fcat-f4availabl&nbsp;=&nbsp;'X'.<br />
+&nbsp;&nbsp;ENDIF.<br />
+&nbsp;&nbsp;IF&nbsp;gw_fcat-fieldname&nbsp;=&nbsp;'SRNO'.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;gw_fcat-no_out&nbsp;=&nbsp;'X'.<br />
+&nbsp;&nbsp;ENDIF.<br />
+   </div>
+   <div class="codeComment">
+*&nbsp;&nbsp;IF&nbsp;gw_fcat-fieldname&nbsp;=&nbsp;'XDEL'.<br />
+*&nbsp;&nbsp;&nbsp;&nbsp;gw_fcat-checkbox&nbsp;=&nbsp;'X'.<br />
+*&nbsp;&nbsp;ENDIF.<br />
+<br />
+   </div>
+   <div class="code">
+&nbsp;&nbsp;APPEND&nbsp;gw_fcat&nbsp;TO&nbsp;ft_fcat.<br />
+&nbsp;&nbsp;CLEAR&nbsp;gw_fcat.<br />
+ENDFORM.                    "build_fcat<br />
+   </div>
+   <div class="codeComment">
+*&---------------------------------------------------------------------*<br />
+*&&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Form&nbsp;&nbsp;set_pf_status<br />
+*&---------------------------------------------------------------------*<br />
+*&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;text<br />
+*----------------------------------------------------------------------*<br />
+*&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;--&gt;RT_EXTAB&nbsp;&nbsp;&nbsp;text<br />
+*----------------------------------------------------------------------*<br />
+   </div>
+   <div class="code">
+FORM set_pf_status USING rt_extab TYPE slis_t_extab.<br />
+&nbsp;&nbsp;SET&nbsp;PF-STATUS&nbsp;'ZFIR0235_STATUS'&nbsp;OF&nbsp;PROGRAM&nbsp;sy-repid.<br />
+ENDFORM.                    "set_pf_status<br />
+   </div>
+   <div class="codeComment">
+*&---------------------------------------------------------------------*<br />
+*&&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Form&nbsp;&nbsp;REGISTER_EVENTS<br />
+*&---------------------------------------------------------------------*<br />
+*&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;text<br />
+*----------------------------------------------------------------------*<br />
+*&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;--&gt;P_GT_EVENTS&nbsp;&nbsp;text<br />
+*----------------------------------------------------------------------*<br />
+   </div>
+   <div class="code">
+FORM register_events USING xt_events TYPE slis_t_event.<br />
+&nbsp;&nbsp;DATA:&nbsp;ls_event&nbsp;TYPE&nbsp;slis_alv_event.<br />
+<br />
+&nbsp;&nbsp;ls_event-name&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;'DATA_CHANGED'.<br />
+&nbsp;&nbsp;ls_event-form&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;'ALV_DATA_CHANGED'.<br />
+&nbsp;&nbsp;APPEND&nbsp;ls_event&nbsp;TO&nbsp;xt_events.<br />
+ENDFORM. " REGISTER_EVENTS<br />
+<br />
+   </div>
+   <div class="codeComment">
+*&---------------------------------------------------------------------*<br />
+*&&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Form&nbsp;&nbsp;alv_data_changed<br />
+*&---------------------------------------------------------------------*<br />
+*&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;text<br />
+*----------------------------------------------------------------------*<br />
+*&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;--&gt;ER_DATA_CHANGED&nbsp;&nbsp;text<br />
+*----------------------------------------------------------------------*<br />
+   </div>
+   <div class="code">
+FORM alv_data_changed USING er_data_changed<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;TYPE&nbsp;REF&nbsp;TO&nbsp;cl_alv_changed_data_protocol.<br />
+&nbsp;&nbsp;DATA:&nbsp;lv_change&nbsp;&nbsp;&nbsp;TYPE&nbsp;lvc_s_modi,<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;lv_rows&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;TYPE&nbsp;lvc_s_roid,<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;lv_cols&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;TYPE&nbsp;lvc_s_col,<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;lv_row_id&nbsp;&nbsp;&nbsp;TYPE&nbsp;lvc_s_roid,<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;lv_col_id&nbsp;&nbsp;&nbsp;TYPE&nbsp;lvc_s_col,<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;lv_col&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;TYPE&nbsp;lvc_s_col,<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;lv_num&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;TYPE&nbsp;lvc_s_roid,<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;lv_plan_qty&nbsp;TYPE&nbsp;vbap-kwmeng,<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;lv_dlv_qty&nbsp;&nbsp;TYPE&nbsp;vbap-kwmeng,<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;lv_po_qty&nbsp;&nbsp;&nbsp;TYPE&nbsp;vbap-kwmeng.<br />
+<br />
+&nbsp;&nbsp;DATA:&nbsp;ls_usr_addr&nbsp;TYPE&nbsp;user_addr.<br />
+<br />
+&nbsp;&nbsp;DATA:&nbsp;is_stable&nbsp;TYPE&nbsp;lvc_s_stbl.<br />
+&nbsp;&nbsp;is_stable-row&nbsp;=&nbsp;'X'.<br />
+&nbsp;&nbsp;is_stable-col&nbsp;=&nbsp;'X'.<br />
+<br />
+&nbsp;&nbsp;IF&nbsp;e_grid&nbsp;IS&nbsp;INITIAL.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;CALL&nbsp;FUNCTION&nbsp;'GET_GLOBALS_FROM_SLVC_FULLSCR'<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;IMPORTING<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;e_grid&nbsp;=&nbsp;e_grid.<br />
+&nbsp;&nbsp;ENDIF.<br />
+<br />
+&nbsp;&nbsp;LOOP&nbsp;AT&nbsp;er_data_changed-&gt;mt_good_cells&nbsp;INTO&nbsp;lv_change.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;READ&nbsp;TABLE&nbsp;gt_clust&nbsp;ASSIGNING&nbsp;&lt;fs_clust&gt;&nbsp;INDEX&nbsp;lv_change-row_id.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;IF&nbsp;sy-subrc&nbsp;=&nbsp;0.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;CASE&nbsp;lv_change-fieldname&nbsp;.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;WHEN&nbsp;'PROJECT'.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&lt;fs_clust&gt;-project&nbsp;=&nbsp;lv_change-value.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;SELECT&nbsp;SINGLE&nbsp;pr_desc<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;FROM&nbsp;zfi_prjmapp<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;INTO&nbsp;&lt;fs_clust&gt;-pr_desc<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;WHERE&nbsp;project&nbsp;EQ&nbsp;&lt;fs_clust&gt;-project.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;WHEN&nbsp;'BNAME'.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&lt;fs_clust&gt;-bname&nbsp;=&nbsp;lv_change-value.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;SELECT&nbsp;SINGLE&nbsp;*<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;FROM&nbsp;user_addr<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;INTO&nbsp;ls_usr_addr<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;WHERE&nbsp;bname&nbsp;EQ&nbsp;&lt;fs_clust&gt;-bname.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;CONCATENATE&nbsp;ls_usr_addr-name_first&nbsp;ls_usr_addr-name_last<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;INTO&nbsp;&lt;fs_clust&gt;-aname.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;WHEN&nbsp;'DATAB'.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&lt;fs_clust&gt;-datab&nbsp;=&nbsp;lv_change-value.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;WHEN&nbsp;'DATBI'.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&lt;fs_clust&gt;-datbi&nbsp;=&nbsp;lv_change-value.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;ENDCASE.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;ENDIF.<br />
+&nbsp;&nbsp;ENDLOOP.<br />
+<br />
+&nbsp;&nbsp;CALL&nbsp;METHOD&nbsp;e_grid-&gt;get_current_cell<br />
+&nbsp;&nbsp;&nbsp;&nbsp;IMPORTING<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;es_col_id&nbsp;=&nbsp;lv_cols<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;es_row_no&nbsp;=&nbsp;lv_rows.<br />
+<br />
+&nbsp;&nbsp;CALL&nbsp;METHOD&nbsp;e_grid-&gt;get_scroll_info_via_id<br />
+&nbsp;&nbsp;&nbsp;&nbsp;IMPORTING<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;es_col_info&nbsp;=&nbsp;lv_col<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;es_row_no&nbsp;&nbsp;&nbsp;=&nbsp;lv_num.<br />
+<br />
+&nbsp;&nbsp;CALL&nbsp;METHOD&nbsp;e_grid-&gt;refresh_table_display<br />
+&nbsp;&nbsp;&nbsp;&nbsp;EXPORTING<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;is_stable&nbsp;=&nbsp;is_stable.<br />
+<br />
+&nbsp;&nbsp;CALL&nbsp;METHOD&nbsp;e_grid-&gt;set_scroll_info_via_id<br />
+&nbsp;&nbsp;&nbsp;&nbsp;EXPORTING<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;is_col_info&nbsp;=&nbsp;lv_col<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;is_row_no&nbsp;&nbsp;&nbsp;=&nbsp;lv_num.<br />
+<br />
+&nbsp;&nbsp;lv_row_id-row_id&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;lv_rows-row_id.<br />
+&nbsp;&nbsp;lv_col_id-fieldname&nbsp;=&nbsp;lv_cols-fieldname.<br />
+<br />
+&nbsp;&nbsp;CALL&nbsp;METHOD&nbsp;e_grid-&gt;set_current_cell_via_id<br />
+&nbsp;&nbsp;&nbsp;&nbsp;EXPORTING<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;is_column_id&nbsp;=&nbsp;lv_col_id<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;is_row_no&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;lv_row_id.<br />
+ENDFORM. "ALV_DATA_CHANGED<br />
+   </div>
+   <div class="codeComment">
+*&---------------------------------------------------------------------*<br />
+*&&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Form&nbsp;&nbsp;uv_user_command<br />
+*&---------------------------------------------------------------------*<br />
+*&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;text<br />
+*----------------------------------------------------------------------*<br />
+*&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;--&gt;R_UCOMM&nbsp;&nbsp;&nbsp;&nbsp;text<br />
+*&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;--&gt;R_SELFIELD&nbsp;text<br />
+*----------------------------------------------------------------------*<br />
+   </div>
+   <div class="code">
+FORM user_command USING r_ucomm LIKE sy-ucomm<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;r_selfield&nbsp;TYPE&nbsp;slis_selfield.<br />
+&nbsp;&nbsp;DATA:&nbsp;lv_change&nbsp;&nbsp;&nbsp;TYPE&nbsp;lvc_s_modi,<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;lv_rows&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;TYPE&nbsp;lvc_s_roid,<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;lv_cols&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;TYPE&nbsp;lvc_s_col,<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;lv_row_id&nbsp;&nbsp;&nbsp;TYPE&nbsp;lvc_s_roid,<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;lv_col_id&nbsp;&nbsp;&nbsp;TYPE&nbsp;lvc_s_col,<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;lv_col&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;TYPE&nbsp;lvc_s_col,<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;lv_num&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;TYPE&nbsp;lvc_s_roid,<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;lv_plan_qty&nbsp;TYPE&nbsp;vbap-kwmeng,<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;lv_no&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;TYPE&nbsp;leshp_interface_id,<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;l_del_row&nbsp;&nbsp;&nbsp;TYPE&nbsp;lvc_s_moce,<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;l_valid1&nbsp;&nbsp;&nbsp;&nbsp;TYPE&nbsp;char1,<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;lv_clust&nbsp;&nbsp;&nbsp;&nbsp;TYPE&nbsp;int4,<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;lv_clust_n&nbsp;&nbsp;TYPE&nbsp;int4,<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;lv_flag&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;TYPE&nbsp;int1,<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;lv_ans.<br />
+<br />
+&nbsp;&nbsp;DATA:&nbsp;lt_clust&nbsp;&nbsp;TYPE&nbsp;TABLE&nbsp;OF&nbsp;zfi_clustzapp,<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;it_clust&nbsp;&nbsp;TYPE&nbsp;TABLE&nbsp;OF&nbsp;zfi_clustzapp,<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;ls_clust&nbsp;&nbsp;TYPE&nbsp;zfi_clustzapp,<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;is_clust&nbsp;&nbsp;TYPE&nbsp;zfi_clustzapp,<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;it_log&nbsp;&nbsp;&nbsp;&nbsp;TYPE&nbsp;TABLE&nbsp;OF&nbsp;zfi_clust_log,<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;is_log&nbsp;&nbsp;&nbsp;&nbsp;TYPE&nbsp;zfi_clust_log,<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;ls_clust1&nbsp;TYPE&nbsp;gty_clust,<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;dt_clust&nbsp;&nbsp;TYPE&nbsp;TABLE&nbsp;OF&nbsp;gty_clust,<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;ds_clust&nbsp;&nbsp;TYPE&nbsp;gty_clust,<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;lv_srno&nbsp;&nbsp;&nbsp;TYPE&nbsp;char5.<br />
+<br />
+&nbsp;&nbsp;IF&nbsp;e_grid&nbsp;IS&nbsp;INITIAL.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;CALL&nbsp;FUNCTION&nbsp;'GET_GLOBALS_FROM_SLVC_FULLSCR'<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;IMPORTING<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;e_grid&nbsp;=&nbsp;e_grid.<br />
+&nbsp;&nbsp;ENDIF.<br />
+<br />
+   </div>
+   <div class="codeComment">
+*&nbsp;For&nbsp;capturing&nbsp;the&nbsp;changed&nbsp;data&nbsp;even&nbsp;b4&nbsp;any&nbsp;user-action<br />
+   </div>
+   <div class="code">
+&nbsp;&nbsp;CALL&nbsp;METHOD&nbsp;e_grid-&gt;check_changed_data<br />
+&nbsp;&nbsp;&nbsp;&nbsp;IMPORTING<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;e_valid&nbsp;=&nbsp;l_valid1.<br />
+<br />
+&nbsp;&nbsp;CASE&nbsp;r_ucomm.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;WHEN&nbsp;'SAVE'.<br />
+   </div>
+   <div class="codeComment">
+****Data&nbsp;Manipulation&nbsp;and&nbsp;validations<br />
+   </div>
+   <div class="code">
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;DATA&nbsp;:&nbsp;lv_char.<br />
+   </div>
+   <div class="codeComment">
+*&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;break&nbsp;ecc_dev7.<br />
+   </div>
+   <div class="code">
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;DELETE&nbsp;gt_clust&nbsp;WHERE&nbsp;project&nbsp;IS&nbsp;INITIAL.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;SORT&nbsp;gt_clust&nbsp;BY&nbsp;project&nbsp;datab.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;dt_clust[]&nbsp;=&nbsp;gt_clust[].<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;SORT&nbsp;dt_clust&nbsp;BY&nbsp;project&nbsp;datab.<br />
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;CALL&nbsp;FUNCTION&nbsp;'POPUP_TO_CONFIRM'<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;EXPORTING<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;titlebar&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;'Confirm'<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;text_question&nbsp;=&nbsp;'Do&nbsp;you&nbsp;want&nbsp;to&nbsp;save&nbsp;data?'<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;text_button_1&nbsp;=&nbsp;'Yes'<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;text_button_2&nbsp;=&nbsp;'No'<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;IMPORTING<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;answer&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;lv_ans.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;CASE&nbsp;lv_ans.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;WHEN&nbsp;'1'.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;LOOP&nbsp;AT&nbsp;gt_clust&nbsp;INTO&nbsp;gs_clust.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;IF&nbsp;gs_clust-datab&nbsp;GE&nbsp;gs_clust-datbi.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;CONCATENATE&nbsp;'Valid&nbsp;From&nbsp;Date&nbsp;should&nbsp;be&nbsp;less&nbsp;than&nbsp;Valid&nbsp;To&nbsp;Date.&nbsp;in&nbsp;line&nbsp;'<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;gs_clust-srno<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;INTO&nbsp;lv_msg2.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;MESSAGE&nbsp;lv_msg2&nbsp;TYPE&nbsp;'E'.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;ENDIF.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;lv_srno&nbsp;=&nbsp;gs_clust-srno.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;CONDENSE&nbsp;lv_srno.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;LOOP&nbsp;AT&nbsp;dt_clust&nbsp;INTO&nbsp;ds_clust&nbsp;WHERE&nbsp;project&nbsp;=&nbsp;gs_clust-project<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;AND&nbsp;&nbsp;&nbsp;datab&nbsp;&nbsp;&nbsp;=&nbsp;gs_clust-datab<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;AND&nbsp;&nbsp;&nbsp;srno&nbsp;&nbsp;&nbsp;NE&nbsp;gs_clust-srno.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;IF&nbsp;lv_srno&nbsp;NE&nbsp;ds_clust-srno.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;break&nbsp;ecc_dev5.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;CONCATENATE&nbsp;'Duplicate&nbsp;Entry&nbsp;in&nbsp;line&nbsp;'<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;ds_clust-srno<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;INTO&nbsp;lv_msg3.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;MESSAGE&nbsp;lv_msg3&nbsp;TYPE&nbsp;'E'.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;ENDIF.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;ENDLOOP.<br />
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;LOOP&nbsp;AT&nbsp;gt_clust&nbsp;INTO&nbsp;ls_clust1&nbsp;WHERE&nbsp;project&nbsp;EQ&nbsp;gs_clust-project.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;IF&nbsp;ls_clust1-datab&nbsp;EQ&nbsp;gs_clust-datab&nbsp;AND<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;ls_clust1-datbi&nbsp;EQ&nbsp;gs_clust-datbi.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;ELSEIF&nbsp;ls_clust1-datab&nbsp;GT&nbsp;gs_clust-datbi&nbsp;OR<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;ls_clust1-datbi&nbsp;LT&nbsp;gs_clust-datab.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;ELSE.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;CONCATENATE&nbsp;'Date&nbsp;Overlapping&nbsp;for&nbsp;Project&nbsp;in&nbsp;line&nbsp;'<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;ls_clust1-srno<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;INTO&nbsp;lv_msg1.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;MESSAGE&nbsp;lv_msg1&nbsp;TYPE&nbsp;'E'.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;ENDIF.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;ENDLOOP.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;"Below&nbsp;logic&nbsp;added&nbsp;by&nbsp;ECC_DEV7&nbsp;on&nbsp;29/01/2019<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;LOOP&nbsp;AT&nbsp;gt_clust&nbsp;INTO&nbsp;ls_clust1.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;SELECT&nbsp;SINGLE&nbsp;*&nbsp;FROM&nbsp;zfi_prjmapp&nbsp;INTO&nbsp;wa_prjmapp&nbsp;WHERE&nbsp;project&nbsp;=&nbsp;ls_clust1-project.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;IF&nbsp;ls_clust1-datab&nbsp;GE&nbsp;wa_prjmapp-prstdt&nbsp;AND<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;ls_clust1-datbi&nbsp;LE&nbsp;wa_prjmapp-prendt.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;ELSE.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;CONCATENATE&nbsp;'Validity&nbsp;is&nbsp;not&nbsp;within&nbsp;Project&nbsp;Start&nbsp;and&nbsp;End&nbsp;Date'&nbsp;ls_clust1-srno<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;INTO&nbsp;lv_msg1&nbsp;SEPARATED&nbsp;BY&nbsp;space.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;MESSAGE&nbsp;lv_msg1&nbsp;TYPE&nbsp;'E'.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;ENDIF.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;ENDLOOP.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;"End&nbsp;of&nbsp;code&nbsp;added&nbsp;by&nbsp;ECC_DEV7&nbsp;on&nbsp;29/01/2019<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;MOVE-CORRESPONDING&nbsp;gs_clust&nbsp;TO&nbsp;ls_clust.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;ls_clust-mandt&nbsp;=&nbsp;sy-mandt.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;APPEND&nbsp;ls_clust&nbsp;TO&nbsp;lt_clust.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;CLEAR:&nbsp;ls_clust,gs_clust.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;ENDLOOP.<br />
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;IF&nbsp;lt_clust&nbsp;IS&nbsp;NOT&nbsp;INITIAL&nbsp;AND&nbsp;r_ucomm&nbsp;EQ&nbsp;'SAVE'.<br />
+   </div>
+   <div class="codeComment">
+****************Checking&nbsp;weather&nbsp;any&nbsp;data&nbsp;is&nbsp;changed&nbsp;or&nbsp;not.<br />
+   </div>
+   <div class="code">
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;lv_flag&nbsp;=&nbsp;1.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;DESCRIBE&nbsp;TABLE&nbsp;gt_clust&nbsp;LINES&nbsp;lv_clust.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;DESCRIBE&nbsp;TABLE&nbsp;gt_clust_t&nbsp;LINES&nbsp;lv_clust_n.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;IF&nbsp;lv_clust_n&nbsp;EQ&nbsp;lv_clust.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;LOOP&nbsp;AT&nbsp;gt_clust&nbsp;INTO&nbsp;gs_clust.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;READ&nbsp;TABLE&nbsp;gt_clust_t&nbsp;INTO&nbsp;gs_clust_t<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;WITH&nbsp;KEY&nbsp;project&nbsp;=&nbsp;gs_clust-project<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;datab&nbsp;&nbsp;&nbsp;=&nbsp;gs_clust-datab.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;IF&nbsp;sy-subrc&nbsp;EQ&nbsp;0&nbsp;AND<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;gs_clust-datbi&nbsp;&nbsp;&nbsp;EQ&nbsp;gs_clust_t-datbi&nbsp;AND<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;gs_clust-pr_desc&nbsp;EQ&nbsp;gs_clust_t-pr_desc&nbsp;AND<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;gs_clust-bname&nbsp;&nbsp;&nbsp;EQ&nbsp;gs_clust_t-bname&nbsp;AND<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;gs_clust-aname&nbsp;&nbsp;&nbsp;EQ&nbsp;gs_clust_t-aname.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;"Same&nbsp;Data<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;ELSE.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;CLEAR&nbsp;lv_flag.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;EXIT.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;ENDIF.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;ENDLOOP.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;ELSE.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;CLEAR&nbsp;lv_flag.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;ENDIF.<br />
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;IF&nbsp;lv_flag&nbsp;EQ&nbsp;1.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;CLEAR&nbsp;lv_flag.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;MESSAGE&nbsp;'No&nbsp;Changes&nbsp;Made.'&nbsp;TYPE&nbsp;'S'.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;LEAVE&nbsp;TO&nbsp;SCREEN&nbsp;0.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;ELSE.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;SELECT&nbsp;*<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;FROM&nbsp;zfi_clustzapp<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;INTO&nbsp;TABLE&nbsp;it_clust.<br />
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;LOOP&nbsp;AT&nbsp;it_clust&nbsp;INTO&nbsp;is_clust.&nbsp;&nbsp;&nbsp;"Populating&nbsp;Log&nbsp;Table<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;MOVE-CORRESPONDING&nbsp;is_clust&nbsp;TO&nbsp;is_log.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;IF&nbsp;is_log-entry_dt&nbsp;IS&nbsp;INITIAL.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;is_log-entry_dt&nbsp;&nbsp;=&nbsp;sy-datum.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;ENDIF.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;IF&nbsp;is_log-entry_tim&nbsp;IS&nbsp;INITIAL.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;is_log-entry_tim&nbsp;=&nbsp;sy-uzeit.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;ENDIF.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;is_log-changby&nbsp;=&nbsp;sy-uname.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;APPEND&nbsp;is_log&nbsp;TO&nbsp;it_log.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;CLEAR:&nbsp;is_log,is_clust.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;ENDLOOP.<br />
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;MODIFY&nbsp;zfi_clust_log&nbsp;FROM&nbsp;TABLE&nbsp;it_log.&nbsp;&nbsp;&nbsp;&nbsp;"Modifies&nbsp;Log&nbsp;table<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;DELETE&nbsp;zfi_clustzapp&nbsp;FROM&nbsp;TABLE&nbsp;it_clust.&nbsp;&nbsp;"Deletes&nbsp;&nbsp;all&nbsp;entries<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;MODIFY&nbsp;zfi_clustzapp&nbsp;FROM&nbsp;TABLE&nbsp;lt_clust.&nbsp;&nbsp;"Modifies&nbsp;all&nbsp;entries<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;IF&nbsp;sy-subrc&nbsp;EQ&nbsp;0.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;MESSAGE&nbsp;'Data&nbsp;Saved'&nbsp;TYPE&nbsp;'S'.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;LEAVE&nbsp;TO&nbsp;SCREEN&nbsp;0.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;ENDIF.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;ENDIF.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;ENDIF.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;WHEN&nbsp;'A'.<br />
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;WHEN&nbsp;'2'.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;LEAVE&nbsp;TO&nbsp;SCREEN&nbsp;0.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;ENDCASE.<br />
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;WHEN&nbsp;'&ADD'.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;DESCRIBE&nbsp;TABLE&nbsp;gt_clust&nbsp;LINES&nbsp;gv_srno.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;CLEAR&nbsp;gs_clust.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;CONDENSE&nbsp;gv_srno.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;gs_clust-srno&nbsp;=&nbsp;gv_srno&nbsp;+&nbsp;1.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;CONDENSE&nbsp;gs_clust-srno.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;APPEND&nbsp;gs_clust&nbsp;TO&nbsp;gt_clust.&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;"Append&nbsp;Blank&nbsp;Rows<br />
+&nbsp;&nbsp;&nbsp;&nbsp;WHEN&nbsp;'&DEL'.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;DELETE&nbsp;gt_clust&nbsp;WHERE&nbsp;xdel&nbsp;EQ&nbsp;'X'.&nbsp;&nbsp;&nbsp;"Delete&nbsp;Selected&nbsp;Rows.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;IF&nbsp;sy-subrc&nbsp;EQ&nbsp;0.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;CLEAR&nbsp;gv_srno.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;LOOP&nbsp;AT&nbsp;gt_clust&nbsp;ASSIGNING&nbsp;&lt;fs_clust&gt;.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;gv_srno&nbsp;=&nbsp;gv_srno&nbsp;+&nbsp;1.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;CONDENSE&nbsp;gv_srno.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&lt;fs_clust&gt;-srno&nbsp;=&nbsp;gv_srno.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;CONDENSE&nbsp;&lt;fs_clust&gt;-srno.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;ENDLOOP.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;ELSE.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;MESSAGE&nbsp;'Select&nbsp;any&nbsp;Entry.'&nbsp;TYPE&nbsp;'I'.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;ENDIF.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;WHEN&nbsp;OTHERS.<br />
+&nbsp;&nbsp;ENDCASE.<br />
+<br />
+&nbsp;&nbsp;CALL&nbsp;METHOD&nbsp;e_grid-&gt;get_current_cell<br />
+&nbsp;&nbsp;&nbsp;&nbsp;IMPORTING<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;es_col_id&nbsp;=&nbsp;lv_cols<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;es_row_no&nbsp;=&nbsp;lv_rows.<br />
+<br />
+&nbsp;&nbsp;CALL&nbsp;METHOD&nbsp;e_grid-&gt;get_scroll_info_via_id<br />
+&nbsp;&nbsp;&nbsp;&nbsp;IMPORTING<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;es_col_info&nbsp;=&nbsp;lv_col<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;es_row_no&nbsp;&nbsp;&nbsp;=&nbsp;lv_num.<br />
+<br />
+&nbsp;&nbsp;CALL&nbsp;METHOD&nbsp;e_grid-&gt;refresh_table_display.<br />
+<br />
+&nbsp;&nbsp;CALL&nbsp;METHOD&nbsp;e_grid-&gt;set_scroll_info_via_id<br />
+&nbsp;&nbsp;&nbsp;&nbsp;EXPORTING<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;is_col_info&nbsp;=&nbsp;lv_col<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;is_row_no&nbsp;&nbsp;&nbsp;=&nbsp;lv_num.<br />
+<br />
+&nbsp;&nbsp;lv_row_id-row_id&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;lv_rows-row_id.<br />
+&nbsp;&nbsp;lv_col_id-fieldname&nbsp;=&nbsp;lv_cols-fieldname.<br />
+<br />
+&nbsp;&nbsp;CALL&nbsp;METHOD&nbsp;e_grid-&gt;set_current_cell_via_id<br />
+&nbsp;&nbsp;&nbsp;&nbsp;EXPORTING<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;is_column_id&nbsp;=&nbsp;lv_col_id<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;is_row_no&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;lv_row_id.<br />
+ENDFORM.                    "uv_user_command<br />
+   </div>
+   <div class="codeComment">
+*&---------------------------------------------------------------------*<br />
+*&&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Form&nbsp;&nbsp;MODIFY_SEL_SCR<br />
+*&---------------------------------------------------------------------*<br />
+*&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;text<br />
+*----------------------------------------------------------------------*<br />
+*&nbsp;&nbsp;--&gt;&nbsp;&nbsp;p1&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;text<br />
+*&nbsp;&nbsp;&lt;--&nbsp;&nbsp;p2&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;text<br />
+*----------------------------------------------------------------------*<br />
+   </div>
+   <div class="code">
+FORM modify_sel_scr.<br />
+&nbsp;&nbsp;IF&nbsp;p_master&nbsp;EQ&nbsp;'X'.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;LOOP&nbsp;AT&nbsp;SCREEN.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;IF&nbsp;screen-group1&nbsp;=&nbsp;'YYY'.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;screen-input&nbsp;=&nbsp;0.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;screen-invisible&nbsp;=&nbsp;1.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;MODIFY&nbsp;SCREEN.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;ENDIF.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;ENDLOOP.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;CLEAR&nbsp;:&nbsp;p_prdpl,p_app.<br />
+&nbsp;&nbsp;ELSEIF&nbsp;p_log&nbsp;EQ&nbsp;'X'.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;LOOP&nbsp;AT&nbsp;SCREEN.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;IF&nbsp;screen-group1&nbsp;=&nbsp;'XXX'.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;screen-input&nbsp;=&nbsp;0.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;screen-invisible&nbsp;=&nbsp;1.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;MODIFY&nbsp;SCREEN.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;ENDIF.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;ENDLOOP.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;CLEAR:&nbsp;p_auth,<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;p_prjmsr&nbsp;,<br />
+   </div>
+   <div class="codeComment">
+*&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;p_clust,<br />
+   </div>
+   <div class="code">
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;p_dept,<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;p_prjbnk,<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;p_sign&nbsp;,<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;p_prjdpt.<br />
+&nbsp;&nbsp;ELSEIF&nbsp;p_mrep&nbsp;eq&nbsp;'X'.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;LOOP&nbsp;AT&nbsp;SCREEN.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;IF&nbsp;screen-group1&nbsp;=&nbsp;'XXX'.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;screen-input&nbsp;=&nbsp;0.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;screen-invisible&nbsp;=&nbsp;1.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;MODIFY&nbsp;SCREEN.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;ENDIF.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;ENDLOOP.<br />
+&nbsp;&nbsp;&nbsp;LOOP&nbsp;AT&nbsp;SCREEN.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;IF&nbsp;screen-group1&nbsp;=&nbsp;'YYY'.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;screen-input&nbsp;=&nbsp;0.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;screen-invisible&nbsp;=&nbsp;1.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;MODIFY&nbsp;SCREEN.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;ENDIF.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;ENDLOOP.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;CLEAR&nbsp;:&nbsp;p_prdpl,p_app.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;CLEAR:&nbsp;p_auth,<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;p_prjmsr&nbsp;,<br />
+   </div>
+   <div class="codeComment">
+*&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;p_clust,<br />
+   </div>
+   <div class="code">
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;p_dept,<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;p_prjbnk,<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;p_sign&nbsp;,<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;p_prjdpt.<br />
+&nbsp;&nbsp;ENDIF.<br />
+ENDFORM.                    " MODIFY_SEL_SCR<br />
+   </div>
+   <div class="codeComment">
+*&---------------------------------------------------------------------*<br />
+*&&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Form&nbsp;&nbsp;CLUSTER_HEAD_LOG<br />
+*&---------------------------------------------------------------------*<br />
+*&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;text<br />
+*----------------------------------------------------------------------*<br />
+*&nbsp;&nbsp;--&gt;&nbsp;&nbsp;p1&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;text<br />
+*&nbsp;&nbsp;&lt;--&nbsp;&nbsp;p2&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;text<br />
+*----------------------------------------------------------------------*<br />
+   </div>
+   <div class="code">
+FORM cluster_head_log.<br />
+&nbsp;&nbsp;DATA&nbsp;:&nbsp;lt_log&nbsp;TYPE&nbsp;TABLE&nbsp;OF&nbsp;zfi_clust_log,<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;ls_sort&nbsp;TYPE&nbsp;slis_sortinfo_alv,<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;lt_sort&nbsp;TYPE&nbsp;slis_t_sortinfo_alv.<br />
+<br />
+&nbsp;&nbsp;SELECT&nbsp;*<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;FROM&nbsp;zfi_clust_log<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;INTO&nbsp;TABLE&nbsp;lt_log.<br />
+<br />
+&nbsp;&nbsp;IF&nbsp;lt_log&nbsp;IS&nbsp;NOT&nbsp;INITIAL.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;SORT&nbsp;lt_log&nbsp;BY&nbsp;entry_dt&nbsp;entry_tim&nbsp;project&nbsp;datab.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;CLEAR&nbsp;:&nbsp;gs_layout,gv_title.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;REFRESH:&nbsp;gt_fcat1.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;gs_layout-colwidth_optimize&nbsp;=&nbsp;abap_true.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;gs_layout-zebra&nbsp;=&nbsp;abap_true.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;gv_title&nbsp;=&nbsp;'Cluster&nbsp;Head&nbsp;Log'.<br />
+<br />
+   </div>
+   <div class="codeComment">
+*****Sort<br />
+   </div>
+   <div class="code">
+&nbsp;&nbsp;&nbsp;&nbsp;ls_sort-spos&nbsp;=&nbsp;1.&nbsp;"&nbsp;Sort&nbsp;order<br />
+&nbsp;&nbsp;&nbsp;&nbsp;ls_sort-fieldname&nbsp;=&nbsp;'ENTRY_DT'.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;ls_sort-down&nbsp;=&nbsp;'X'.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;APPEND&nbsp;ls_sort&nbsp;TO&nbsp;lt_sort.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;CLEAR&nbsp;ls_sort.<br />
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;ls_sort-spos&nbsp;=&nbsp;1.&nbsp;"&nbsp;Sort&nbsp;order<br />
+&nbsp;&nbsp;&nbsp;&nbsp;ls_sort-fieldname&nbsp;=&nbsp;'ENTRY_TIM'.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;ls_sort-down&nbsp;=&nbsp;'X'.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;APPEND&nbsp;ls_sort&nbsp;TO&nbsp;lt_sort.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;CLEAR&nbsp;ls_sort.<br />
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;CALL&nbsp;FUNCTION&nbsp;'REUSE_ALV_GRID_DISPLAY'<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;EXPORTING<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;i_callback_program&nbsp;=&nbsp;sy-repid<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;i_grid_title&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;gv_title<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;i_structure_name&nbsp;&nbsp;&nbsp;=&nbsp;'ZFI_CLUST_LOG'<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;is_layout&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;gs_layout<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;it_fieldcat&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;gt_fcat1<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;it_sort&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;lt_sort<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;i_default&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;'X'<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;TABLES<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;t_outtab&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;lt_log<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;EXCEPTIONS<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;program_error&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;1<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;OTHERS&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;2.<br />
+&nbsp;&nbsp;ELSE.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;MESSAGE&nbsp;'No&nbsp;Record&nbsp;Exist.'&nbsp;TYPE&nbsp;'S'&nbsp;DISPLAY&nbsp;LIKE&nbsp;'E'.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;LEAVE&nbsp;LIST-PROCESSING.<br />
+&nbsp;&nbsp;ENDIF.<br />
+ENDFORM.                    " CLUSTER_HEAD_LOG<br />
+   </div>
+   <div class="codeComment">
+*&---------------------------------------------------------------------*<br />
+*&&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Form&nbsp;&nbsp;PRJ_DEPT_LOG<br />
+*&---------------------------------------------------------------------*<br />
+*&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;text<br />
+*----------------------------------------------------------------------*<br />
+*&nbsp;&nbsp;--&gt;&nbsp;&nbsp;p1&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;text<br />
+*&nbsp;&nbsp;&lt;--&nbsp;&nbsp;p2&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;text<br />
+*----------------------------------------------------------------------*<br />
+   </div>
+   <div class="code">
+FORM prj_dept_log.<br />
+&nbsp;&nbsp;DATA:&nbsp;lt_log&nbsp;TYPE&nbsp;TABLE&nbsp;OF&nbsp;zfi_prjdeptlog.<br />
+<br />
+&nbsp;&nbsp;SELECT&nbsp;*<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;FROM&nbsp;zfi_prjdeptlog<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;INTO&nbsp;TABLE&nbsp;lt_log.<br />
+<br />
+&nbsp;&nbsp;IF&nbsp;lt_log&nbsp;IS&nbsp;NOT&nbsp;INITIAL.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;CLEAR&nbsp;:&nbsp;gs_layout,gv_title.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;REFRESH:&nbsp;gt_fcat1.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;gs_layout-colwidth_optimize&nbsp;=&nbsp;abap_true.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;gs_layout-zebra&nbsp;=&nbsp;abap_true.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;gv_title&nbsp;=&nbsp;'Project&nbsp;Department&nbsp;Log'.<br />
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;CALL&nbsp;FUNCTION&nbsp;'REUSE_ALV_GRID_DISPLAY'<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;EXPORTING<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;i_callback_program&nbsp;=&nbsp;sy-repid<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;i_grid_title&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;gv_title<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;i_structure_name&nbsp;&nbsp;&nbsp;=&nbsp;'ZFI_PRJDEPTLOG'<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;is_layout&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;gs_layout<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;it_fieldcat&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;gt_fcat1<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;i_default&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;'X'<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;TABLES<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;t_outtab&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;lt_log<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;EXCEPTIONS<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;program_error&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;1<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;OTHERS&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;2.<br />
+&nbsp;&nbsp;ELSE.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;MESSAGE&nbsp;'No&nbsp;Record&nbsp;Exist.'&nbsp;TYPE&nbsp;'S'&nbsp;DISPLAY&nbsp;LIKE&nbsp;'E'.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;LEAVE&nbsp;LIST-PROCESSING.<br />
+&nbsp;&nbsp;ENDIF.<br />
+ENDFORM.                    " PRJ_DEPT_LOG<br />
+   </div>
+   <div class="codeComment">
+*&---------------------------------------------------------------------*<br />
+*&&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Form&nbsp;&nbsp;DOC_APP_LOG<br />
+*&---------------------------------------------------------------------*<br />
+*&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;text<br />
+*----------------------------------------------------------------------*<br />
+*&nbsp;&nbsp;--&gt;&nbsp;&nbsp;p1&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;text<br />
+*&nbsp;&nbsp;&lt;--&nbsp;&nbsp;p2&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;text<br />
+*----------------------------------------------------------------------*<br />
+   </div>
+   <div class="code">
+FORM doc_app_log.<br />
+   </div>
+   <div class="codeComment">
+*&nbsp;&nbsp;DATA:&nbsp;lt_log&nbsp;TYPE&nbsp;TABLE&nbsp;OF&nbsp;zfi_app_post.<br />
+*<br />
+*&nbsp;&nbsp;SELECT&nbsp;*<br />
+*&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;FROM&nbsp;zfi_app_post<br />
+*&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;INTO&nbsp;TABLE&nbsp;lt_log.<br />
+*<br />
+*&nbsp;&nbsp;IF&nbsp;lt_log&nbsp;IS&nbsp;NOT&nbsp;INITIAL.<br />
+*&nbsp;&nbsp;&nbsp;&nbsp;SORT&nbsp;lt_log&nbsp;BY&nbsp;serialno&nbsp;slitem.<br />
+*&nbsp;&nbsp;&nbsp;&nbsp;CLEAR&nbsp;:&nbsp;gs_layout,gv_title.<br />
+*&nbsp;&nbsp;&nbsp;&nbsp;REFRESH:&nbsp;gt_fcat1.<br />
+*&nbsp;&nbsp;&nbsp;&nbsp;gs_layout-colwidth_optimize&nbsp;=&nbsp;abap_true.<br />
+*&nbsp;&nbsp;&nbsp;&nbsp;gs_layout-zebra&nbsp;=&nbsp;abap_true.<br />
+*&nbsp;&nbsp;&nbsp;&nbsp;gv_title&nbsp;=&nbsp;'Payment&nbsp;Data&nbsp;Log'.<br />
+*<br />
+*&nbsp;&nbsp;&nbsp;&nbsp;CALL&nbsp;FUNCTION&nbsp;'REUSE_ALV_GRID_DISPLAY'<br />
+*&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;EXPORTING<br />
+*&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;i_callback_program&nbsp;=&nbsp;sy-repid<br />
+*&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;i_grid_title&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;gv_title<br />
+*&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;i_structure_name&nbsp;&nbsp;&nbsp;=&nbsp;'ZFI_APP_POST'<br />
+*&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;is_layout&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;gs_layout<br />
+*&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;it_fieldcat&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;gt_fcat1<br />
+*&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;i_default&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;'X'<br />
+*&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;TABLES<br />
+*&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;t_outtab&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;lt_log<br />
+*&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;EXCEPTIONS<br />
+*&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;program_error&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;1<br />
+*&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;OTHERS&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;2.<br />
+*&nbsp;&nbsp;ELSE.<br />
+*&nbsp;&nbsp;&nbsp;&nbsp;MESSAGE&nbsp;'No&nbsp;Record&nbsp;Exist.'&nbsp;TYPE&nbsp;'S'&nbsp;DISPLAY&nbsp;LIKE&nbsp;'E'.<br />
+*&nbsp;&nbsp;&nbsp;&nbsp;LEAVE&nbsp;LIST-PROCESSING.<br />
+*&nbsp;&nbsp;ENDIF.<br />
+   </div>
+   <div class="code">
+ENDFORM.                    " DOC_APP_LOG<br />
+   </div>
+   <div class="codeComment">
+*&---------------------------------------------------------------------*<br />
+*&&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Form&nbsp;&nbsp;PC_APPROVAL<br />
+*&---------------------------------------------------------------------*<br />
+*&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;text<br />
+*----------------------------------------------------------------------*<br />
+*&nbsp;&nbsp;--&gt;&nbsp;&nbsp;p1&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;text<br />
+*&nbsp;&nbsp;&lt;--&nbsp;&nbsp;p2&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;text<br />
+*----------------------------------------------------------------------*<br />
+   </div>
+   <div class="code">
+FORM pc_approval.<br />
+<br />
+&nbsp;&nbsp;CALL&nbsp;TRANSACTION&nbsp;'ZFI_MPRJ_PRCTR'.<br />
+   </div>
+   <div class="codeComment">
+*&nbsp;&nbsp;DATA:&nbsp;lt_log&nbsp;TYPE&nbsp;TABLE&nbsp;OF&nbsp;zmm_dn_prctr_grp.<br />
+*<br />
+*&nbsp;&nbsp;SELECT&nbsp;*<br />
+*&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;FROM&nbsp;zmm_dn_prctr_grp<br />
+*&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;INTO&nbsp;TABLE&nbsp;lt_log.<br />
+*<br />
+*&nbsp;&nbsp;IF&nbsp;lt_log&nbsp;IS&nbsp;NOT&nbsp;INITIAL.<br />
+*&nbsp;&nbsp;&nbsp;&nbsp;CLEAR&nbsp;:&nbsp;gs_layout,gv_title.<br />
+*&nbsp;&nbsp;&nbsp;&nbsp;REFRESH:&nbsp;gt_fcat1.<br />
+*&nbsp;&nbsp;&nbsp;&nbsp;gs_layout-colwidth_optimize&nbsp;=&nbsp;abap_true.<br />
+*&nbsp;&nbsp;&nbsp;&nbsp;gs_layout-zebra&nbsp;=&nbsp;abap_true.<br />
+*&nbsp;&nbsp;&nbsp;&nbsp;gv_title&nbsp;=&nbsp;'DN&nbsp;Approval&nbsp;Profit&nbsp;Center&nbsp;Group'.<br />
+*<br />
+*&nbsp;&nbsp;&nbsp;&nbsp;CALL&nbsp;FUNCTION&nbsp;'REUSE_ALV_GRID_DISPLAY'<br />
+*&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;EXPORTING<br />
+*&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;i_callback_program&nbsp;=&nbsp;sy-repid<br />
+*&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;i_grid_title&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;gv_title<br />
+*&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;i_structure_name&nbsp;&nbsp;&nbsp;=&nbsp;'ZMM_DN_PRCTR_GRP'<br />
+*&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;is_layout&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;gs_layout<br />
+*&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;it_fieldcat&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;gt_fcat1<br />
+*&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;i_default&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;'X'<br />
+*&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;TABLES<br />
+*&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;t_outtab&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;lt_log<br />
+*&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;EXCEPTIONS<br />
+*&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;program_error&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;1<br />
+*&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;OTHERS&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;2.<br />
+*&nbsp;&nbsp;ELSE.<br />
+*&nbsp;&nbsp;&nbsp;&nbsp;MESSAGE&nbsp;'No&nbsp;Record&nbsp;Exist.'&nbsp;TYPE&nbsp;'E'.<br />
+*&nbsp;&nbsp;ENDIF.<br />
+   </div>
+   <div class="code">
+ENDFORM.                    " PC_APPROVAL<br />
+<br />
+   </div>
+   <div class="codeComment">
+*Text&nbsp;elements<br />
+*----------------------------------------------------------<br />
+*&nbsp;001&nbsp;Selection&nbsp;Criteria<br />
+*&nbsp;002&nbsp;Master&nbsp;Data<br />
+*&nbsp;003&nbsp;Log&nbsp;Data<br />
+<br />
+<br />
+*Selection&nbsp;texts<br />
+*----------------------------------------------------------<br />
+*&nbsp;P_APP&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Payment&nbsp;Data<br />
+*&nbsp;P_AUTH&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Control&nbsp;Location<br />
+*&nbsp;P_BNKGRP&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Activation&nbsp;of&nbsp;Bank&nbsp;for&nbsp;VOP<br />
+*&nbsp;P_CLUSTL&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Cluster&nbsp;Head&nbsp;Log<br />
+*&nbsp;P_DEPT&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Department<br />
+*&nbsp;P_DNPRCT&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Profit&nbsp;Center&nbsp;to&nbsp;Proj.&nbsp;Mapping<br />
+*&nbsp;P_EKGRP&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Purchase&nbsp;Grp&nbsp;-&nbsp;Dept&nbsp;Mapping<br />
+*&nbsp;P_LOG&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Log&nbsp;Data<br />
+*&nbsp;P_MASTER&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Master&nbsp;Data<br />
+*&nbsp;P_MNGR&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;VOP&nbsp;Manager<br />
+*&nbsp;P_MREP&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;All&nbsp;Master&nbsp;Details<br />
+*&nbsp;P_PRDPL&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Project&nbsp;to&nbsp;Department&nbsp;Log<br />
+*&nbsp;P_PRJACT&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Project&nbsp;Activation&nbsp;for&nbsp;VOP<br />
+*&nbsp;P_PRJBNK&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Project&nbsp;to&nbsp;Bank<br />
+*&nbsp;P_PRJDPT&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Mapping&nbsp;Location&nbsp;wise&nbsp;HOD<br />
+*&nbsp;P_PRJMSR&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Project&nbsp;Master<br />
+*&nbsp;P_SIGN&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Assignment&nbsp;-&nbsp;Signatory&nbsp;to&nbsp;Bank<br />
+<br />
+<br />
+*Messages<br />
+*----------------------------------------------------------<br />
+*<br />
+*&nbsp;Message&nbsp;class:&nbsp;Hard&nbsp;coded<br />
+*&nbsp;&nbsp;&nbsp;No&nbsp;Changes&nbsp;Made.<br />
+            </div>
+          </td>
+        </tr>
+      </table>
+      </td>
+      </tr>
+   <tr>
+<td class="footer">Extracted by Mass Download version 1.4.1 - E.G.Mellodew. 1998-2019. Sap Release 731</td>
+   </tr>
+</table>
+</body>
+</html>
