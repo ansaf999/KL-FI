@@ -1,0 +1,417 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.1//EN" "http://www.w3.org/TR/xhtml11/DTD/xhtml11.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="application/xhtml+xml; charset=ISO-8859-1" />
+<title>MZ_PROFIT_SHARE_TABLEI01</title>
+<style type="text/css">
+.code{ font-family:"Courier New", Courier, monospace; color:#000; font-size:14px; background-color:#F2F4F7 }
+  .codeComment {font-family:"Courier New", Courier, monospace; color:#0000F0; font-size:14px; background-color:#F2F4F7 }
+  .normalBold{ font-family:Arial, Helvetica, sans-serif; color:#000; font-size:12px; font-weight:800 }
+  .normalBoldLarge{ font-family:Arial, Helvetica, sans-serif; color:#000; font-size:16px; font-weight:800 }
+</style>
+<style type="text/css">
+  .normal{ font-family:Arial, Helvetica, sans-serif; color:#000; font-size:12px }
+  .footer{ font-family:Arial, Helvetica, sans-serif; color:#000; font-size:12px; text-align: center }
+  h2{ font-family:Arial, Helvetica, sans-serif; color:#000; font-size:16px; font-weight:800 }
+  h3{ font-family:Arial, Helvetica, sans-serif; color:#000; font-size:14px; font-weight:800 }
+  .outerTable{
+   background-color:#E0E7ED;
+   width:100%;
+   border-top-width: thin;
+   border-right-width: thin;
+   border-right-width: thin;
+   border-left-width: thin;
+   border-top-style: solid;
+   border-right-style: solid;
+   border-bottom-style: solid;
+   border-left-style: solid;
+  }
+  .innerTable{
+   background-color:#F2F4F7;
+   width:100%;
+   border-top-width: thin;
+   border-right-width: thin;
+   border-bottom-width: thin;
+   border-left-width: thin;
+   border-top-style: solid;
+   border-right-style: solid;
+   border-bottom-style: solid;
+   border-left-style: solid;
+  }
+</style>
+</head>
+<body>
+<table class="outerTable">
+  <tr class="normalBoldLarge">
+     <td><h2>Code listing for: MZ_PROFIT_SHARE_TABLEI01</h2>
+<h3> Description: Include MZ_PROFIT_SHARE_TABLEI01</h3></td>
+   </tr>
+  <tr>
+     <td>
+     <table class="innerTable">
+       <tr>
+          <td>
+   <div class="codeComment">
+*&---------------------------------------------------------------------*<br />
+*&&nbsp;&nbsp;Include&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;MZ_PROFIT_SHARE_TABLEI01<br />
+*&---------------------------------------------------------------------*<br />
+*&---------------------------------------------------------------------*<br />
+*&&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Form&nbsp;&nbsp;POPULATE_MAIL_BODY<br />
+*&---------------------------------------------------------------------*<br />
+*&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;text<br />
+*----------------------------------------------------------------------*<br />
+*&nbsp;&nbsp;--&gt;&nbsp;&nbsp;p1&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;text<br />
+*&nbsp;&nbsp;&lt;--&nbsp;&nbsp;p2&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;text<br />
+*----------------------------------------------------------------------*<br />
+   </div>
+   <div class="code">
+FORM populate_mail_body .<br />
+&nbsp;&nbsp;REFRESH&nbsp;:&nbsp;it_recipient[].<br />
+<br />
+&nbsp;&nbsp;IF&nbsp;sy-mandt&nbsp;EQ&nbsp;'300'.<br />
+   </div>
+   <div class="codeComment">
+*&nbsp;Add&nbsp;the&nbsp;recipients&nbsp;email&nbsp;address<br />
+***&nbsp;&nbsp;&nbsp;&nbsp;CLEAR&nbsp;wa_recipient.<br />
+***&nbsp;&nbsp;&nbsp;&nbsp;wa_recipient-receiver&nbsp;=&nbsp;'yusuf.sheikh@kalpataru.com'.<br />
+***&nbsp;&nbsp;&nbsp;&nbsp;wa_recipient-rec_type&nbsp;=&nbsp;'U'.<br />
+***&nbsp;&nbsp;&nbsp;&nbsp;wa_recipient-com_type&nbsp;=&nbsp;'INT'.<br />
+***&nbsp;&nbsp;&nbsp;&nbsp;wa_recipient-notif_del&nbsp;=&nbsp;'X'.<br />
+***&nbsp;&nbsp;&nbsp;&nbsp;wa_recipient-notif_ndel&nbsp;=&nbsp;'X'.<br />
+***&nbsp;&nbsp;&nbsp;&nbsp;APPEND&nbsp;wa_recipient&nbsp;TO&nbsp;it_recipient.<br />
+<br />
+*&nbsp;&nbsp;&nbsp;&nbsp;CLEAR&nbsp;wa_recipient.<br />
+*&nbsp;&nbsp;&nbsp;&nbsp;wa_recipient-receiver&nbsp;=&nbsp;'manoj.thakar@kalpataru.com'.<br />
+*&nbsp;&nbsp;&nbsp;&nbsp;wa_recipient-rec_type&nbsp;=&nbsp;'U'.<br />
+*&nbsp;&nbsp;&nbsp;&nbsp;wa_recipient-com_type&nbsp;=&nbsp;'INT'.<br />
+*&nbsp;&nbsp;&nbsp;&nbsp;wa_recipient-notif_del&nbsp;=&nbsp;'X'.<br />
+*&nbsp;&nbsp;&nbsp;&nbsp;wa_recipient-notif_ndel&nbsp;=&nbsp;'X'.<br />
+*&nbsp;&nbsp;&nbsp;&nbsp;APPEND&nbsp;wa_recipient&nbsp;TO&nbsp;it_recipient.<br />
+*<br />
+*&nbsp;&nbsp;&nbsp;&nbsp;CLEAR&nbsp;wa_recipient.<br />
+*&nbsp;&nbsp;&nbsp;&nbsp;wa_recipient-receiver&nbsp;=&nbsp;'prakash.bapna@kalpataru.com'.<br />
+*&nbsp;&nbsp;&nbsp;&nbsp;wa_recipient-rec_type&nbsp;=&nbsp;'U'.<br />
+*&nbsp;&nbsp;&nbsp;&nbsp;wa_recipient-com_type&nbsp;=&nbsp;'INT'.<br />
+*&nbsp;&nbsp;&nbsp;&nbsp;wa_recipient-notif_del&nbsp;=&nbsp;'X'.<br />
+*&nbsp;&nbsp;&nbsp;&nbsp;wa_recipient-notif_ndel&nbsp;=&nbsp;'X'.<br />
+*&nbsp;&nbsp;&nbsp;&nbsp;APPEND&nbsp;wa_recipient&nbsp;TO&nbsp;it_recipient.<br />
+<br />
+*____&nbsp;&nbsp;Added&nbsp;by&nbsp;mahendra&nbsp;on&nbsp;14.07.2016&nbsp;&nbsp;&nbsp;&nbsp;___________________*<br />
+<br />
+   </div>
+   <div class="code">
+&nbsp;&nbsp;&nbsp;&nbsp;CLEAR&nbsp;wa_recipient.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;wa_recipient-receiver&nbsp;=&nbsp;'group.fact@kalpataru.com'.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;wa_recipient-rec_type&nbsp;=&nbsp;'U'.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;wa_recipient-com_type&nbsp;=&nbsp;'INT'.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;wa_recipient-notif_del&nbsp;=&nbsp;'X'.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;wa_recipient-notif_ndel&nbsp;=&nbsp;'X'.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;APPEND&nbsp;wa_recipient&nbsp;TO&nbsp;it_recipient.<br />
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;CLEAR&nbsp;wa_recipient.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;wa_recipient-receiver&nbsp;=&nbsp;'group.cs@kalpataru.com'.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;wa_recipient-rec_type&nbsp;=&nbsp;'U'.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;wa_recipient-com_type&nbsp;=&nbsp;'INT'.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;wa_recipient-notif_del&nbsp;=&nbsp;'X'.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;wa_recipient-notif_ndel&nbsp;=&nbsp;'X'.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;APPEND&nbsp;wa_recipient&nbsp;TO&nbsp;it_recipient.<br />
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;CLEAR&nbsp;wa_recipient.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;wa_recipient-receiver&nbsp;=&nbsp;'group-Banking@kalpataru.com'.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;wa_recipient-rec_type&nbsp;=&nbsp;'U'.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;wa_recipient-com_type&nbsp;=&nbsp;'INT'.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;wa_recipient-notif_del&nbsp;=&nbsp;'X'.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;wa_recipient-notif_ndel&nbsp;=&nbsp;'X'.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;APPEND&nbsp;wa_recipient&nbsp;TO&nbsp;it_recipient.<br />
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;CLEAR&nbsp;wa_recipient.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;wa_recipient-receiver&nbsp;=&nbsp;'Group-FACT_Core_Support_CS@kalpatarugroup.com'.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;wa_recipient-rec_type&nbsp;=&nbsp;'U'.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;wa_recipient-com_type&nbsp;=&nbsp;'INT'.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;wa_recipient-notif_del&nbsp;=&nbsp;'X'.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;wa_recipient-notif_ndel&nbsp;=&nbsp;'X'.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;APPEND&nbsp;wa_recipient&nbsp;TO&nbsp;it_recipient.<br />
+<br />
+   </div>
+   <div class="codeComment">
+*_________&nbsp;&nbsp;&nbsp;End&nbsp;of&nbsp;added&nbsp;by&nbsp;mahendra&nbsp;&nbsp;_____________________________*<br />
+<br />
+   </div>
+   <div class="code">
+&nbsp;&nbsp;ELSE.<br />
+<br />
+   </div>
+   <div class="codeComment">
+***&nbsp;&nbsp;&nbsp;&nbsp;CLEAR&nbsp;wa_recipient.<br />
+***&nbsp;&nbsp;&nbsp;&nbsp;wa_recipient-receiver&nbsp;=&nbsp;'yusuf.sheikh@kalpataru.com'.<br />
+***&nbsp;&nbsp;&nbsp;&nbsp;wa_recipient-rec_type&nbsp;=&nbsp;'U'.<br />
+***&nbsp;&nbsp;&nbsp;&nbsp;wa_recipient-com_type&nbsp;=&nbsp;'INT'.<br />
+***&nbsp;&nbsp;&nbsp;&nbsp;wa_recipient-notif_del&nbsp;=&nbsp;'X'.<br />
+***&nbsp;&nbsp;&nbsp;&nbsp;wa_recipient-notif_ndel&nbsp;=&nbsp;'X'.<br />
+***&nbsp;&nbsp;&nbsp;&nbsp;APPEND&nbsp;wa_recipient&nbsp;TO&nbsp;it_recipient.<br />
+<br />
+   </div>
+   <div class="code">
+&nbsp;&nbsp;&nbsp;&nbsp;CLEAR&nbsp;wa_recipient.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;wa_recipient-receiver&nbsp;=&nbsp;'sap-testing@kalpataru.com'.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;wa_recipient-rec_type&nbsp;=&nbsp;'U'.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;wa_recipient-com_type&nbsp;=&nbsp;'INT'.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;wa_recipient-notif_del&nbsp;=&nbsp;'X'.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;wa_recipient-notif_ndel&nbsp;=&nbsp;'X'.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;APPEND&nbsp;wa_recipient&nbsp;TO&nbsp;it_recipient.<br />
+&nbsp;&nbsp;ENDIF.<br />
+<br />
+ENDFORM.                    " POPULATE_MAIL_BODY<br />
+   </div>
+   <div class="codeComment">
+*&---------------------------------------------------------------------*<br />
+*&&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Form&nbsp;&nbsp;MAIL_TRIGGER<br />
+*&---------------------------------------------------------------------*<br />
+*&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;text<br />
+*----------------------------------------------------------------------*<br />
+*&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;--&gt;P_IT_MESSAGE&nbsp;&nbsp;text<br />
+*&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;--&gt;P_IT_OBJTXT&nbsp;&nbsp;text<br />
+*&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;--&gt;P_0257&nbsp;&nbsp;&nbsp;text<br />
+*&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&lt;--P_GD_ERROR&nbsp;&nbsp;text<br />
+*&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&lt;--P_GD_RECIEVER&nbsp;&nbsp;text<br />
+*----------------------------------------------------------------------*<br />
+   </div>
+   <div class="code">
+FORM mail_trigger  TABLES  pit_message<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;pit_objtxt<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;USING&nbsp;&nbsp;p_mtitle<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;CHANGING&nbsp;p_error<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;p_reciever.<br />
+<br />
+   </div>
+   <div class="codeComment">
+*&nbsp;Fill&nbsp;the&nbsp;document&nbsp;data.<br />
+   </div>
+   <div class="code">
+&nbsp;&nbsp;CLEAR&nbsp;wa_document.<br />
+<br />
+   </div>
+   <div class="codeComment">
+*&nbsp;Populate&nbsp;the&nbsp;subject/generic&nbsp;message&nbsp;attributes<br />
+   </div>
+   <div class="code">
+&nbsp;&nbsp;wa_document-obj_langu&nbsp;=&nbsp;sy-langu.<br />
+&nbsp;&nbsp;wa_document-obj_name&nbsp;&nbsp;=&nbsp;'TEST'.<br />
+&nbsp;&nbsp;wa_document-obj_descr&nbsp;=&nbsp;p_mtitle&nbsp;.<br />
+<br />
+&nbsp;&nbsp;REFRESH&nbsp;:&nbsp;it_objtxt[].<br />
+<br />
+   </div>
+   <div class="codeComment">
+*...Message&nbsp;Body&nbsp;in&nbsp;HMTL<br />
+   </div>
+   <div class="code">
+&nbsp;&nbsp;wa_objtxt-line&nbsp;=&nbsp;'&lt;html&gt;&nbsp;&lt;body&gt;'.<br />
+&nbsp;&nbsp;APPEND&nbsp;wa_objtxt&nbsp;TO&nbsp;it_objtxt.<br />
+<br />
+   </div>
+   <div class="codeComment">
+*&nbsp;&nbsp;&nbsp;table&nbsp;display<br />
+   </div>
+   <div class="code">
+&nbsp;&nbsp;wa_objtxt-line&nbsp;=&nbsp;'&lt;table&nbsp;bordercolor="black"&nbsp;&nbsp;'.<br />
+&nbsp;&nbsp;APPEND&nbsp;wa_objtxt&nbsp;TO&nbsp;it_objtxt.<br />
+&nbsp;&nbsp;wa_objtxt-line&nbsp;=&nbsp;'&nbsp;cellspacing="0"&nbsp;width="1000"'.<br />
+&nbsp;&nbsp;APPEND&nbsp;wa_objtxt&nbsp;TO&nbsp;it_objtxt.<br />
+&nbsp;&nbsp;wa_objtxt-line&nbsp;=&nbsp;'&nbsp;border="1"&gt;&lt;tbody&gt;&lt;tr&gt;'.<br />
+&nbsp;&nbsp;APPEND&nbsp;wa_objtxt&nbsp;TO&nbsp;it_objtxt.<br />
+<br />
+   </div>
+   <div class="codeComment">
+*&nbsp;&nbsp;&nbsp;table&nbsp;header<br />
+   </div>
+   <div class="code">
+&nbsp;&nbsp;wa_objtxt-line&nbsp;=&nbsp;'&lt;th&gt;Serial&nbsp;Number&lt;/th&gt;&nbsp;&nbsp;'.<br />
+&nbsp;&nbsp;APPEND&nbsp;wa_objtxt&nbsp;TO&nbsp;it_objtxt.<br />
+&nbsp;&nbsp;wa_objtxt-line&nbsp;=&nbsp;'&lt;th&gt;Firm&nbsp;Code&lt;/th&gt;'.<br />
+&nbsp;&nbsp;APPEND&nbsp;wa_objtxt&nbsp;TO&nbsp;it_objtxt.<br />
+&nbsp;&nbsp;wa_objtxt-line&nbsp;=&nbsp;'&lt;th&gt;Firm&nbsp;Description&lt;/th&gt;'.<br />
+&nbsp;&nbsp;APPEND&nbsp;wa_objtxt&nbsp;TO&nbsp;it_objtxt.<br />
+&nbsp;&nbsp;wa_objtxt-line&nbsp;=&nbsp;'&lt;th&gt;Party&nbsp;Code&lt;/th&gt;'.<br />
+&nbsp;&nbsp;APPEND&nbsp;wa_objtxt&nbsp;TO&nbsp;it_objtxt.<br />
+&nbsp;&nbsp;wa_objtxt-line&nbsp;=&nbsp;'&lt;th&gt;Partner&nbsp;Description&lt;/th&gt;'.<br />
+&nbsp;&nbsp;APPEND&nbsp;wa_objtxt&nbsp;TO&nbsp;it_objtxt.<br />
+&nbsp;&nbsp;wa_objtxt-line&nbsp;=&nbsp;'&lt;th&gt;Net&nbsp;Profit&nbsp;Share&lt;/th&gt;'.<br />
+&nbsp;&nbsp;APPEND&nbsp;wa_objtxt&nbsp;TO&nbsp;it_objtxt.<br />
+&nbsp;&nbsp;wa_objtxt-line&nbsp;=&nbsp;'&lt;th&gt;Valid&nbsp;From&nbsp;Date&lt;/th&gt;'.<br />
+&nbsp;&nbsp;APPEND&nbsp;wa_objtxt&nbsp;TO&nbsp;it_objtxt.<br />
+&nbsp;&nbsp;wa_objtxt-line&nbsp;=&nbsp;'&lt;th&gt;Created&nbsp;on&lt;/th&gt;'.<br />
+&nbsp;&nbsp;APPEND&nbsp;wa_objtxt&nbsp;TO&nbsp;it_objtxt.<br />
+&nbsp;&nbsp;wa_objtxt-line&nbsp;=&nbsp;'&lt;th&gt;Time&lt;/th&gt;'.<br />
+&nbsp;&nbsp;APPEND&nbsp;wa_objtxt&nbsp;TO&nbsp;it_objtxt.<br />
+&nbsp;&nbsp;wa_objtxt-line&nbsp;=&nbsp;'&lt;th&gt;Created&nbsp;by&lt;/th&gt;'.<br />
+&nbsp;&nbsp;APPEND&nbsp;wa_objtxt&nbsp;TO&nbsp;it_objtxt.<br />
+<br />
+   </div>
+   <div class="codeComment">
+*&nbsp;Table&nbsp;contents.<br />
+   </div>
+   <div class="code">
+&nbsp;&nbsp;LOOP&nbsp;AT&nbsp;it_final_mail&nbsp;INTO&nbsp;wa_final_mail.<br />
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;wa_objtxt-line&nbsp;=&nbsp;'&lt;tr&gt;'.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;APPEND&nbsp;wa_objtxt&nbsp;TO&nbsp;it_objtxt.<br />
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;CONCATENATE&nbsp;'&lt;td&gt;'&nbsp;wa_final_mail-srno&nbsp;'&lt;/td&gt;'&nbsp;INTO&nbsp;wa_objtxt-line.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;APPEND&nbsp;wa_objtxt&nbsp;TO&nbsp;it_objtxt.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;CONCATENATE&nbsp;'&lt;td&gt;'&nbsp;wa_final_mail-firmcd&nbsp;'&lt;/td&gt;'&nbsp;INTO&nbsp;wa_objtxt-line.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;APPEND&nbsp;wa_objtxt&nbsp;TO&nbsp;it_objtxt.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;CONCATENATE&nbsp;'&lt;td&gt;'&nbsp;wa_final_mail-firmtxt&nbsp;'&lt;/td&gt;'&nbsp;INTO&nbsp;wa_objtxt-line.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;APPEND&nbsp;wa_objtxt&nbsp;TO&nbsp;it_objtxt.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;CONCATENATE&nbsp;'&lt;td&gt;'&nbsp;wa_final_mail-partcod&nbsp;'&lt;/td&gt;'&nbsp;INTO&nbsp;wa_objtxt-line.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;APPEND&nbsp;wa_objtxt&nbsp;TO&nbsp;it_objtxt.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;CONCATENATE&nbsp;'&lt;td&gt;'&nbsp;wa_final_mail-parttxt&nbsp;'&lt;/td&gt;'&nbsp;INTO&nbsp;wa_objtxt-line.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;APPEND&nbsp;wa_objtxt&nbsp;TO&nbsp;it_objtxt.<br />
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;WRITE&nbsp;wa_final_mail-netprf&nbsp;TO&nbsp;gv_netprf.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;CONCATENATE&nbsp;'&lt;td&gt;'&nbsp;gv_netprf&nbsp;'&lt;/td&gt;'&nbsp;INTO&nbsp;wa_objtxt-line.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;APPEND&nbsp;wa_objtxt&nbsp;TO&nbsp;it_objtxt.<br />
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;WRITE&nbsp;wa_final_mail-sdate&nbsp;TO&nbsp;p_date.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;CONCATENATE&nbsp;'&lt;td&gt;'&nbsp;p_date&nbsp;'&lt;/td&gt;'&nbsp;INTO&nbsp;wa_objtxt-line.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;APPEND&nbsp;wa_objtxt&nbsp;TO&nbsp;it_objtxt.<br />
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;WRITE&nbsp;wa_final_mail-erdat&nbsp;TO&nbsp;p_erdat.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;CONCATENATE&nbsp;'&lt;td&gt;'&nbsp;p_erdat&nbsp;'&lt;/td&gt;'&nbsp;INTO&nbsp;wa_objtxt-line.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;APPEND&nbsp;wa_objtxt&nbsp;TO&nbsp;it_objtxt.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;CONCATENATE&nbsp;'&lt;td&gt;'&nbsp;wa_final_mail-erzet&nbsp;'&lt;/td&gt;'&nbsp;INTO&nbsp;wa_objtxt-line.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;APPEND&nbsp;wa_objtxt&nbsp;TO&nbsp;it_objtxt.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;CONCATENATE&nbsp;'&lt;td&gt;'&nbsp;wa_final_mail-ernam&nbsp;'&lt;/td&gt;'&nbsp;INTO&nbsp;wa_objtxt-line.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;APPEND&nbsp;wa_objtxt&nbsp;TO&nbsp;it_objtxt.<br />
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;CLEAR&nbsp;:&nbsp;wa_final.<br />
+&nbsp;&nbsp;ENDLOOP.<br />
+<br />
+   </div>
+   <div class="codeComment">
+*&nbsp;&nbsp;&nbsp;table&nbsp;close<br />
+   </div>
+   <div class="code">
+&nbsp;&nbsp;wa_objtxt-line&nbsp;=&nbsp;'&lt;/tbody&gt;&nbsp;&lt;/table&gt;'.<br />
+&nbsp;&nbsp;APPEND&nbsp;wa_objtxt&nbsp;TO&nbsp;it_objtxt.<br />
+<br />
+   </div>
+   <div class="codeComment">
+*&nbsp;&nbsp;&nbsp;HTML&nbsp;close<br />
+   </div>
+   <div class="code">
+&nbsp;&nbsp;wa_objtxt-line&nbsp;=&nbsp;'&lt;/body&gt;&nbsp;&lt;/html&gt;&nbsp;'.<br />
+&nbsp;&nbsp;APPEND&nbsp;wa_objtxt&nbsp;TO&nbsp;it_objtxt.<br />
+   </div>
+   <div class="codeComment">
+*&nbsp;Fill&nbsp;the&nbsp;document&nbsp;data&nbsp;and&nbsp;get&nbsp;size&nbsp;of&nbsp;attachment<br />
+<br />
+   </div>
+   <div class="code">
+&nbsp;&nbsp;DESCRIBE&nbsp;TABLE&nbsp;it_objtxt&nbsp;LINES&nbsp;tab_lines.<br />
+&nbsp;&nbsp;READ&nbsp;TABLE&nbsp;it_objtxt&nbsp;INTO&nbsp;wa_objtxt&nbsp;INDEX&nbsp;tab_lines.<br />
+&nbsp;&nbsp;wa_document-doc_size&nbsp;=<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;(&nbsp;tab_lines&nbsp;-&nbsp;1&nbsp;)&nbsp;*&nbsp;255&nbsp;+&nbsp;strlen(&nbsp;wa_objtxt&nbsp;).<br />
+<br />
+<br />
+   </div>
+   <div class="codeComment">
+**&nbsp;&nbsp;Added&nbsp;by&nbsp;mahendra&nbsp;on&nbsp;14.07.2016&nbsp;&nbsp;******************************<br />
+   </div>
+   <div class="code">
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;gs_objpack-transf_bin&nbsp;=&nbsp;space.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;gs_objpack-head_start&nbsp;=&nbsp;1.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;gs_objpack-head_num&nbsp;=&nbsp;0.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;gs_objpack-body_start&nbsp;=&nbsp;1.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;gs_objpack-body_num&nbsp;=&nbsp;tab_lines.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;gs_objpack-doc_type&nbsp;=&nbsp;'HTM'.&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;"'RAW'.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;APPEND&nbsp;gs_objpack&nbsp;TO&nbsp;gt_objpack.<br />
+<br />
+   </div>
+   <div class="codeComment">
+**&nbsp;&nbsp;End&nbsp;of&nbsp;Added&nbsp;by&nbsp;mahendra&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;******************************<br />
+<br />
+*<br />
+*&nbsp;&nbsp;CALL&nbsp;FUNCTION&nbsp;'SO_NEW_DOCUMENT_SEND_API1'<br />
+*&nbsp;&nbsp;&nbsp;&nbsp;EXPORTING<br />
+*&nbsp;&nbsp;&nbsp;&nbsp;document_data&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;wa_document<br />
+*&nbsp;&nbsp;&nbsp;&nbsp;document_type&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;'HTM'<br />
+*&nbsp;&nbsp;&nbsp;&nbsp;put_in_outbox&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;'X'<br />
+*&nbsp;&nbsp;&nbsp;&nbsp;commit_work&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;'X'<br />
+*&nbsp;&nbsp;&nbsp;&nbsp;TABLES<br />
+**&nbsp;&nbsp;&nbsp;OBJECT_HEADER&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;=<br />
+*&nbsp;&nbsp;&nbsp;&nbsp;object_content&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;it_objtxt<br />
+**&nbsp;&nbsp;&nbsp;CONTENTS_HEX&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;=<br />
+**&nbsp;&nbsp;&nbsp;OBJECT_PARA&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;=<br />
+**&nbsp;&nbsp;&nbsp;OBJECT_PARB&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;=<br />
+*&nbsp;&nbsp;&nbsp;&nbsp;receivers&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;it_recipient<br />
+**&nbsp;EXCEPTIONS<br />
+**&nbsp;&nbsp;&nbsp;TOO_MANY_RECEIVERS&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;1<br />
+**&nbsp;&nbsp;&nbsp;DOCUMENT_NOT_SENT&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;2<br />
+**&nbsp;&nbsp;&nbsp;DOCUMENT_TYPE_NOT_EXIST&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;3<br />
+**&nbsp;&nbsp;&nbsp;OPERATION_NO_AUTHORIZATION&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;4<br />
+**&nbsp;&nbsp;&nbsp;PARAMETER_ERROR&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;5<br />
+**&nbsp;&nbsp;&nbsp;X_ERROR&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;6<br />
+**&nbsp;&nbsp;&nbsp;ENQUEUE_ERROR&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;7<br />
+**&nbsp;&nbsp;&nbsp;OTHERS&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;8<br />
+*&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;.<br />
+*&nbsp;&nbsp;IF&nbsp;sy-subrc&nbsp;&lt;&gt;&nbsp;0.<br />
+**&nbsp;Implement&nbsp;suitable&nbsp;error&nbsp;handling&nbsp;here<br />
+*&nbsp;&nbsp;ENDIF.<br />
+<br />
+**________&nbsp;&nbsp;Added&nbsp;by&nbsp;mahendra&nbsp;on&nbsp;14.07.2016&nbsp;&nbsp;&nbsp;______________________**<br />
+   </div>
+   <div class="code">
+IF SY-MANDT = '300'.<br />
+&nbsp;&nbsp;W_SENDER&nbsp;&nbsp;&nbsp;=&nbsp;'BACKGROUND'.<br />
+ELSEIF SY-MANDT = '110' OR SY-MANDT = '220'.<br />
+&nbsp;&nbsp;W_SENDER&nbsp;=&nbsp;'BACKGROUND'."SY-UNAME.<br />
+ENDIF.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;BREAK&nbsp;ecc_dev3.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;CALL&nbsp;FUNCTION&nbsp;'SO_DOCUMENT_SEND_API1'<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;EXPORTING<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;document_data&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;wa_document<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;PUT_IN_OUTBOX&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;'X'<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;sender_address&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;w_sender<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;sender_address_type&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;'B'<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;TABLES<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;packing_list&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;gt_objpack<br />
+   </div>
+   <div class="codeComment">
+*&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;contents_bin&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;gt_objbin<br />
+   </div>
+   <div class="code">
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;contents_txt&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;it_objtxt<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;receivers&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;it_recipient<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;EXCEPTIONS<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;too_many_receivers&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;1<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;document_not_sent&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;2<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;document_type_not_exist&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;3<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;operation_no_authorization&nbsp;=&nbsp;4<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;parameter_error&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;5<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;x_error&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;6<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;enqueue_error&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;7<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;OTHERS&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;8.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;IF&nbsp;sy-subrc&nbsp;=&nbsp;0.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;commit&nbsp;WORK.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;ENDIF.<br />
+<br />
+   </div>
+   <div class="codeComment">
+*_________&nbsp;&nbsp;End&nbsp;of&nbsp;Added&nbsp;by&nbsp;Mahendra&nbsp;on&nbsp;14.07.2016&nbsp;_________________**<br />
+<br />
+   </div>
+   <div class="code">
+ENDFORM.                    " MAIL_TRIGGER<br />
+            </div>
+          </td>
+        </tr>
+      </table>
+      </td>
+      </tr>
+   <tr>
+<td class="footer">Extracted by Mass Download version 1.4.1 - E.G.Mellodew. 1998-2019. Sap Release 731</td>
+   </tr>
+</table>
+</body>
+</html>

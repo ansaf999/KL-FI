@@ -1,0 +1,303 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.1//EN" "http://www.w3.org/TR/xhtml11/DTD/xhtml11.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="application/xhtml+xml; charset=ISO-8859-1" />
+<title>MZ_DOWNPAY_CLEARINGI01</title>
+<style type="text/css">
+.code{ font-family:"Courier New", Courier, monospace; color:#000; font-size:14px; background-color:#F2F4F7 }
+  .codeComment {font-family:"Courier New", Courier, monospace; color:#0000F0; font-size:14px; background-color:#F2F4F7 }
+  .normalBold{ font-family:Arial, Helvetica, sans-serif; color:#000; font-size:12px; font-weight:800 }
+  .normalBoldLarge{ font-family:Arial, Helvetica, sans-serif; color:#000; font-size:16px; font-weight:800 }
+</style>
+<style type="text/css">
+  .normal{ font-family:Arial, Helvetica, sans-serif; color:#000; font-size:12px }
+  .footer{ font-family:Arial, Helvetica, sans-serif; color:#000; font-size:12px; text-align: center }
+  h2{ font-family:Arial, Helvetica, sans-serif; color:#000; font-size:16px; font-weight:800 }
+  h3{ font-family:Arial, Helvetica, sans-serif; color:#000; font-size:14px; font-weight:800 }
+  .outerTable{
+   background-color:#E0E7ED;
+   width:100%;
+   border-top-width: thin;
+   border-right-width: thin;
+   border-right-width: thin;
+   border-left-width: thin;
+   border-top-style: solid;
+   border-right-style: solid;
+   border-bottom-style: solid;
+   border-left-style: solid;
+  }
+  .innerTable{
+   background-color:#F2F4F7;
+   width:100%;
+   border-top-width: thin;
+   border-right-width: thin;
+   border-bottom-width: thin;
+   border-left-width: thin;
+   border-top-style: solid;
+   border-right-style: solid;
+   border-bottom-style: solid;
+   border-left-style: solid;
+  }
+</style>
+</head>
+<body>
+<table class="outerTable">
+  <tr class="normalBoldLarge">
+     <td><h2>Code listing for: MZ_DOWNPAY_CLEARINGI01</h2>
+<h3> Description: INCLUDE for table control input module (gen.)</h3></td>
+   </tr>
+  <tr>
+     <td>
+     <table class="innerTable">
+       <tr>
+          <td>
+   <div class="codeComment">
+*&---------------------------------------------------------------------*<br />
+*&&nbsp;&nbsp;Include&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;MZ_DOWNPAY_CLEARINGI01<br />
+*&---------------------------------------------------------------------*<br />
+<br />
+*&SPWIZARD:&nbsp;INPUT&nbsp;MODULE&nbsp;FOR&nbsp;TC&nbsp;'TBC_9001'.&nbsp;DO&nbsp;NOT&nbsp;CHANGE&nbsp;THIS&nbsp;LINE!<br />
+*&SPWIZARD:&nbsp;MODIFY&nbsp;TABLE<br />
+   </div>
+   <div class="code">
+MODULE tbc_9001_modify INPUT.<br />
+   </div>
+   <div class="codeComment">
+*&nbsp;&nbsp;MODIFY&nbsp;it_itab<br />
+*&nbsp;&nbsp;&nbsp;&nbsp;FROM&nbsp;wa_itab<br />
+*&nbsp;&nbsp;&nbsp;&nbsp;INDEX&nbsp;tbc_9001-current_line.<br />
+<br />
+   </div>
+   <div class="code">
+&nbsp;&nbsp;IF&nbsp;wa_itab-full_adj&nbsp;=&nbsp;'X'.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;wa_itab-adj_val&nbsp;=&nbsp;wa_itab-avl_val.<br />
+&nbsp;&nbsp;ELSEIF&nbsp;wa_itab-no_adj&nbsp;=&nbsp;'X'.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;wa_itab-adj_val&nbsp;=&nbsp;0.<br />
+&nbsp;&nbsp;ELSEIF&nbsp;wa_itab-part_adj&nbsp;=&nbsp;'X'.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;IF&nbsp;wa_itab-adj_val&nbsp;GT&nbsp;wa_itab-avl_val.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;MESSAGE&nbsp;'Adjusted&nbsp;Value&nbsp;should&nbsp;not&nbsp;exceed&nbsp;Available&nbsp;Value'&nbsp;TYPE&nbsp;'E'.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;ENDIF.<br />
+&nbsp;&nbsp;ENDIF.<br />
+<br />
+&nbsp;&nbsp;MODIFY&nbsp;it_itab<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;FROM&nbsp;wa_itab<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;INDEX&nbsp;tbc_9001-current_line.<br />
+<br />
+&nbsp;&nbsp;IF&nbsp;sy-subrc&nbsp;NE&nbsp;0.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;APPEND&nbsp;wa_itab&nbsp;TO&nbsp;it_itab.<br />
+&nbsp;&nbsp;ENDIF.<br />
+<br />
+ENDMODULE.                    "TBC_9001_MODIFY INPUT<br />
+<br />
+   </div>
+   <div class="codeComment">
+*&SPWIZARD:&nbsp;INPUT&nbsp;MODUL&nbsp;FOR&nbsp;TC&nbsp;'TBC_9001'.&nbsp;DO&nbsp;NOT&nbsp;CHANGE&nbsp;THIS&nbsp;LINE!<br />
+*&SPWIZARD:&nbsp;MARK&nbsp;TABLE<br />
+   </div>
+   <div class="code">
+MODULE tbc_9001_mark INPUT.<br />
+&nbsp;&nbsp;DATA:&nbsp;g_tbc_9001_wa2&nbsp;LIKE&nbsp;LINE&nbsp;OF&nbsp;it_itab.<br />
+&nbsp;&nbsp;IF&nbsp;tbc_9001-line_sel_mode&nbsp;=&nbsp;1<br />
+&nbsp;&nbsp;AND&nbsp;wa_itab-sel&nbsp;=&nbsp;'X'.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;LOOP&nbsp;AT&nbsp;it_itab&nbsp;INTO&nbsp;g_tbc_9001_wa2<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;WHERE&nbsp;sel&nbsp;=&nbsp;'X'.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;g_tbc_9001_wa2-sel&nbsp;=&nbsp;''.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;MODIFY&nbsp;it_itab<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;FROM&nbsp;g_tbc_9001_wa2<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;TRANSPORTING&nbsp;sel.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;ENDLOOP.<br />
+&nbsp;&nbsp;ENDIF.<br />
+&nbsp;&nbsp;MODIFY&nbsp;it_itab<br />
+&nbsp;&nbsp;&nbsp;&nbsp;FROM&nbsp;wa_itab<br />
+&nbsp;&nbsp;&nbsp;&nbsp;INDEX&nbsp;tbc_9001-current_line<br />
+&nbsp;&nbsp;&nbsp;&nbsp;TRANSPORTING&nbsp;sel.<br />
+ENDMODULE.                    "TBC_9001_MARK INPUT<br />
+<br />
+   </div>
+   <div class="codeComment">
+*&SPWIZARD:&nbsp;INPUT&nbsp;MODULE&nbsp;FOR&nbsp;TC&nbsp;'TBC_9001'.&nbsp;DO&nbsp;NOT&nbsp;CHANGE&nbsp;THIS&nbsp;LINE!<br />
+*&SPWIZARD:&nbsp;PROCESS&nbsp;USER&nbsp;COMMAND<br />
+   </div>
+   <div class="code">
+MODULE tbc_9001_user_command INPUT.<br />
+&nbsp;&nbsp;ok_code&nbsp;=&nbsp;sy-ucomm.<br />
+&nbsp;&nbsp;PERFORM&nbsp;user_ok_tc&nbsp;USING&nbsp;&nbsp;&nbsp;&nbsp;'TBC_9001'<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;'IT_ITAB'<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;'SEL'<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;CHANGING&nbsp;ok_code.<br />
+&nbsp;&nbsp;sy-ucomm&nbsp;=&nbsp;ok_code.<br />
+ENDMODULE.                    "TBC_9001_USER_COMMAND INPUT<br />
+   </div>
+   <div class="codeComment">
+*&---------------------------------------------------------------------*<br />
+*&&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Module&nbsp;&nbsp;USER_COMMAND_9001&nbsp;&nbsp;INPUT<br />
+*&---------------------------------------------------------------------*<br />
+*&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;text<br />
+*----------------------------------------------------------------------*<br />
+   </div>
+   <div class="code">
+MODULE user_command_9001 INPUT.<br />
+<br />
+&nbsp;&nbsp;CASE&nbsp;sy-ucomm.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;WHEN&nbsp;'BACK'&nbsp;OR&nbsp;'EXIT'&nbsp;OR&nbsp;'CANC'.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;LEAVE&nbsp;PROGRAM.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;WHEN&nbsp;'SAVE'.<br />
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;EXPORT&nbsp;it_itab&nbsp;FROM&nbsp;it_itab&nbsp;TO&nbsp;MEMORY&nbsp;ID&nbsp;'ITAB'.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;EXPORT&nbsp;i_var01&nbsp;FROM&nbsp;i_var01&nbsp;TO&nbsp;MEMORY&nbsp;ID&nbsp;'VAR01'.<br />
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;SUBMIT&nbsp;zfi_bdc_dpc&nbsp;AND&nbsp;RETURN.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;IMPORT&nbsp;lt_msg&nbsp;TO&nbsp;lt_msg&nbsp;FROM&nbsp;MEMORY&nbsp;ID&nbsp;'MSG'.<br />
+   </div>
+   <div class="codeComment">
+*	WHEN&nbsp;OTHERS.<br />
+   </div>
+   <div class="code">
+&nbsp;&nbsp;ENDCASE.<br />
+ENDMODULE.                 " USER_COMMAND_9001  INPUT<br />
+   </div>
+   <div class="codeComment">
+*&---------------------------------------------------------------------*<br />
+*&&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Module&nbsp;&nbsp;TOT_ADJ_DP&nbsp;&nbsp;INPUT<br />
+*&---------------------------------------------------------------------*<br />
+*&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;text<br />
+*----------------------------------------------------------------------*<br />
+   </div>
+   <div class="code">
+MODULE tot_adj_dp INPUT.<br />
+&nbsp;&nbsp;CLEAR&nbsp;tot_adj_dp.<br />
+<br />
+&nbsp;&nbsp;LOOP&nbsp;AT&nbsp;it_itab&nbsp;INTO&nbsp;wa_itab.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;tot_adj_dp&nbsp;=&nbsp;tot_adj_dp&nbsp;+&nbsp;wa_itab-adj_val.<br />
+&nbsp;&nbsp;ENDLOOP.<br />
+<br />
+ENDMODULE.                 " TOT_ADJ_DP  INPUT<br />
+<br />
+   </div>
+   <div class="codeComment">
+*&SPWIZARD:&nbsp;INPUT&nbsp;MODULE&nbsp;FOR&nbsp;TC&nbsp;'TBC_9001_DN'.&nbsp;DO&nbsp;NOT&nbsp;CHANGE&nbsp;THIS&nbsp;LINE!<br />
+*&SPWIZARD:&nbsp;MODIFY&nbsp;TABLE<br />
+   </div>
+   <div class="code">
+MODULE tbc_9001_dn_modify INPUT.<br />
+   </div>
+   <div class="codeComment">
+*&nbsp;&nbsp;MODIFY&nbsp;IT_ITAB_DN<br />
+*&nbsp;&nbsp;&nbsp;&nbsp;FROM&nbsp;WA_ITAB_DN<br />
+*&nbsp;&nbsp;&nbsp;&nbsp;INDEX&nbsp;TBC_9001_DN-CURRENT_LINE.<br />
+<br />
+   </div>
+   <div class="code">
+&nbsp;&nbsp;IF&nbsp;wa_itab_dn-full_adj&nbsp;=&nbsp;'X'.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;wa_itab_dn-adj_val&nbsp;=&nbsp;wa_itab_dn-avl_val.<br />
+&nbsp;&nbsp;ELSEIF&nbsp;wa_itab_dn-no_adj&nbsp;=&nbsp;'X'.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;wa_itab_dn-adj_val&nbsp;=&nbsp;0.<br />
+&nbsp;&nbsp;ELSEIF&nbsp;wa_itab_dn-part_adj&nbsp;=&nbsp;'X'.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;IF&nbsp;wa_itab_dn-adj_val&nbsp;GT&nbsp;wa_itab_dn-avl_val.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;MESSAGE&nbsp;'Adjusted&nbsp;Value&nbsp;should&nbsp;not&nbsp;exceed&nbsp;Available&nbsp;Value'&nbsp;TYPE&nbsp;'E'.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;ENDIF.<br />
+&nbsp;&nbsp;ENDIF.<br />
+<br />
+&nbsp;&nbsp;MODIFY&nbsp;it_itab_dn<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;FROM&nbsp;wa_itab_dn<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;INDEX&nbsp;tbc_9001-current_line.<br />
+<br />
+&nbsp;&nbsp;IF&nbsp;sy-subrc&nbsp;NE&nbsp;0.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;APPEND&nbsp;wa_itab_dn&nbsp;TO&nbsp;it_itab_dn.<br />
+&nbsp;&nbsp;ENDIF.<br />
+<br />
+ENDMODULE.                    "TBC_9001_DN_MODIFY INPUT<br />
+<br />
+   </div>
+   <div class="codeComment">
+*&SPWIZARD:&nbsp;INPUT&nbsp;MODUL&nbsp;FOR&nbsp;TC&nbsp;'TBC_9001_DN'.&nbsp;DO&nbsp;NOT&nbsp;CHANGE&nbsp;THIS&nbsp;LINE!<br />
+*&SPWIZARD:&nbsp;MARK&nbsp;TABLE<br />
+   </div>
+   <div class="code">
+MODULE tbc_9001_dn_mark INPUT.<br />
+&nbsp;&nbsp;DATA:&nbsp;g_tbc_9001_dn_wa2&nbsp;LIKE&nbsp;LINE&nbsp;OF&nbsp;it_itab_dn.<br />
+&nbsp;&nbsp;IF&nbsp;tbc_9001_dn-line_sel_mode&nbsp;=&nbsp;1<br />
+&nbsp;&nbsp;AND&nbsp;wa_itab_dn-sel&nbsp;=&nbsp;'X'.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;LOOP&nbsp;AT&nbsp;it_itab_dn&nbsp;INTO&nbsp;g_tbc_9001_dn_wa2<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;WHERE&nbsp;sel&nbsp;=&nbsp;'X'.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;g_tbc_9001_dn_wa2-sel&nbsp;=&nbsp;''.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;MODIFY&nbsp;it_itab_dn<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;FROM&nbsp;g_tbc_9001_dn_wa2<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;TRANSPORTING&nbsp;sel.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;ENDLOOP.<br />
+&nbsp;&nbsp;ENDIF.<br />
+&nbsp;&nbsp;MODIFY&nbsp;it_itab_dn<br />
+&nbsp;&nbsp;&nbsp;&nbsp;FROM&nbsp;wa_itab_dn<br />
+&nbsp;&nbsp;&nbsp;&nbsp;INDEX&nbsp;tbc_9001_dn-current_line<br />
+&nbsp;&nbsp;&nbsp;&nbsp;TRANSPORTING&nbsp;sel.<br />
+ENDMODULE.                    "TBC_9001_DN_MARK INPUT<br />
+<br />
+   </div>
+   <div class="codeComment">
+*&SPWIZARD:&nbsp;INPUT&nbsp;MODULE&nbsp;FOR&nbsp;TC&nbsp;'TBC_9001_DN'.&nbsp;DO&nbsp;NOT&nbsp;CHANGE&nbsp;THIS&nbsp;LINE!<br />
+*&SPWIZARD:&nbsp;PROCESS&nbsp;USER&nbsp;COMMAND<br />
+   </div>
+   <div class="code">
+MODULE tbc_9001_dn_user_command INPUT.<br />
+&nbsp;&nbsp;ok_code&nbsp;=&nbsp;sy-ucomm.<br />
+&nbsp;&nbsp;PERFORM&nbsp;user_ok_tc&nbsp;USING&nbsp;&nbsp;&nbsp;&nbsp;'TBC_9001_DN'<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;'IT_ITAB_DN'<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;'SEL'<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;CHANGING&nbsp;ok_code.<br />
+&nbsp;&nbsp;sy-ucomm&nbsp;=&nbsp;ok_code.<br />
+ENDMODULE.                    "TBC_9001_DN_USER_COMMAND INPUT<br />
+   </div>
+   <div class="codeComment">
+*&---------------------------------------------------------------------*<br />
+*&&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Module&nbsp;&nbsp;TOT_ADJ_DN&nbsp;&nbsp;&nbsp;INPUT<br />
+*&---------------------------------------------------------------------*<br />
+*&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;text<br />
+*----------------------------------------------------------------------*<br />
+   </div>
+   <div class="code">
+MODULE tot_adj_dn INPUT.<br />
+&nbsp;&nbsp;CLEAR&nbsp;tot_adj_dn.<br />
+<br />
+&nbsp;&nbsp;LOOP&nbsp;AT&nbsp;it_itab_dn&nbsp;INTO&nbsp;wa_itab_dn.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;tot_adj_dn&nbsp;=&nbsp;tot_adj_dn&nbsp;+&nbsp;wa_itab_dn-adj_val.<br />
+&nbsp;&nbsp;ENDLOOP.<br />
+ENDMODULE.                 " TOT_ADJ_DN   INPUT<br />
+   </div>
+   <div class="codeComment">
+*&---------------------------------------------------------------------*<br />
+*&&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Module&nbsp;&nbsp;USER_COMMAND_DEBITNOTE&nbsp;&nbsp;INPUT<br />
+*&---------------------------------------------------------------------*<br />
+*&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;text<br />
+*----------------------------------------------------------------------*<br />
+   </div>
+   <div class="code">
+MODULE user_command_debitnote INPUT.<br />
+<br />
+&nbsp;&nbsp;CASE&nbsp;sy-ucomm.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;WHEN&nbsp;'BACK'&nbsp;OR&nbsp;'EXIT'&nbsp;OR&nbsp;'CANC'.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;LEAVE&nbsp;PROGRAM.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;WHEN&nbsp;'SAVE'.<br />
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;EXPORT&nbsp;it_itab_dn&nbsp;FROM&nbsp;it_itab_dn&nbsp;TO&nbsp;MEMORY&nbsp;ID&nbsp;'ITAB'.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;EXPORT&nbsp;i_var01&nbsp;FROM&nbsp;i_var01&nbsp;TO&nbsp;MEMORY&nbsp;ID&nbsp;'VAR01'.<br />
+<br />
+   </div>
+   <div class="codeComment">
+*&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;SUBMIT&nbsp;zfi_bdc_dpc&nbsp;AND&nbsp;RETURN.<br />
+*	WHEN&nbsp;OTHERS.<br />
+   </div>
+   <div class="code">
+&nbsp;&nbsp;ENDCASE.<br />
+ENDMODULE.                 " USER_COMMAND_DEBITNOTE  INPUT<br />
+            </div>
+          </td>
+        </tr>
+      </table>
+      </td>
+      </tr>
+   <tr>
+<td class="footer">Extracted by Mass Download version 1.4.1 - E.G.Mellodew. 1998-2019. Sap Release 731</td>
+   </tr>
+</table>
+</body>
+</html>

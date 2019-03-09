@@ -1,0 +1,631 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.1//EN" "http://www.w3.org/TR/xhtml11/DTD/xhtml11.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="application/xhtml+xml; charset=ISO-8859-1" />
+<title>MZFI_AOPI01</title>
+<style type="text/css">
+.code{ font-family:"Courier New", Courier, monospace; color:#000; font-size:14px; background-color:#F2F4F7 }
+  .codeComment {font-family:"Courier New", Courier, monospace; color:#0000F0; font-size:14px; background-color:#F2F4F7 }
+  .normalBold{ font-family:Arial, Helvetica, sans-serif; color:#000; font-size:12px; font-weight:800 }
+  .normalBoldLarge{ font-family:Arial, Helvetica, sans-serif; color:#000; font-size:16px; font-weight:800 }
+</style>
+<style type="text/css">
+  .normal{ font-family:Arial, Helvetica, sans-serif; color:#000; font-size:12px }
+  .footer{ font-family:Arial, Helvetica, sans-serif; color:#000; font-size:12px; text-align: center }
+  h2{ font-family:Arial, Helvetica, sans-serif; color:#000; font-size:16px; font-weight:800 }
+  h3{ font-family:Arial, Helvetica, sans-serif; color:#000; font-size:14px; font-weight:800 }
+  .outerTable{
+   background-color:#E0E7ED;
+   width:100%;
+   border-top-width: thin;
+   border-right-width: thin;
+   border-right-width: thin;
+   border-left-width: thin;
+   border-top-style: solid;
+   border-right-style: solid;
+   border-bottom-style: solid;
+   border-left-style: solid;
+  }
+  .innerTable{
+   background-color:#F2F4F7;
+   width:100%;
+   border-top-width: thin;
+   border-right-width: thin;
+   border-bottom-width: thin;
+   border-left-width: thin;
+   border-top-style: solid;
+   border-right-style: solid;
+   border-bottom-style: solid;
+   border-left-style: solid;
+  }
+</style>
+</head>
+<body>
+<table class="outerTable">
+  <tr class="normalBoldLarge">
+     <td><h2>Code listing for: MZFI_AOPI01</h2>
+<h3> Description: INCLUDE for table control input module (gen.)</h3></td>
+   </tr>
+  <tr>
+     <td>
+     <table class="innerTable">
+       <tr>
+          <td>
+   <div class="codeComment">
+*&---------------------------------------------------------------------*<br />
+*&&nbsp;&nbsp;Include&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;MZFI_AOPI01<br />
+*&---------------------------------------------------------------------*<br />
+<br />
+*&SPWIZARD:&nbsp;INPUT&nbsp;MODULE&nbsp;FOR&nbsp;TC&nbsp;'TBC_9001'.&nbsp;DO&nbsp;NOT&nbsp;CHANGE&nbsp;THIS&nbsp;LINE!<br />
+*&SPWIZARD:&nbsp;MODIFY&nbsp;TABLE<br />
+   </div>
+   <div class="code">
+MODULE tbc_9001_modify INPUT.<br />
+<br />
+&nbsp;&nbsp;DATA&nbsp;:&nbsp;lv_perct&nbsp;TYPE&nbsp;zfi_aop-perct,<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;lv_share&nbsp;TYPE&nbsp;zfi_aop-perct.<br />
+<br />
+&nbsp;&nbsp;SELECT&nbsp;SINGLE&nbsp;butxt&nbsp;FROM&nbsp;t001&nbsp;INTO&nbsp;wa_aop-butxt<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;WHERE&nbsp;bukrs&nbsp;=&nbsp;wa_aop-entity.<br />
+<br />
+&nbsp;&nbsp;SELECT&nbsp;SINGLE&nbsp;butxt&nbsp;FROM&nbsp;t001&nbsp;INTO&nbsp;wa_aop-butxt1<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;WHERE&nbsp;bukrs&nbsp;=&nbsp;wa_aop-member.<br />
+<br />
+&nbsp;&nbsp;IF&nbsp;wa_aop-entity&nbsp;=&nbsp;wa_aop-member.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;MESSAGE&nbsp;'Entity&nbsp;&&nbsp;Member&nbsp;Code&nbsp;should&nbsp;be&nbsp;different'&nbsp;TYPE&nbsp;'E'.<br />
+&nbsp;&nbsp;ENDIF.<br />
+<br />
+&nbsp;&nbsp;SELECT&nbsp;*&nbsp;FROM&nbsp;zfi_aop&nbsp;INTO&nbsp;TABLE&nbsp;it_zfi_aop<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;WHERE&nbsp;entity&nbsp;=&nbsp;wa_aop-entity<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;AND&nbsp;sdate&nbsp;LE&nbsp;wa_aop-sdate<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;AND&nbsp;member&nbsp;NE&nbsp;wa_aop-member.<br />
+<br />
+&nbsp;&nbsp;SORT&nbsp;it_zfi_aop&nbsp;BY&nbsp;member&nbsp;ASCENDING&nbsp;sdate&nbsp;srno&nbsp;DESCENDING.<br />
+&nbsp;&nbsp;DELETE&nbsp;ADJACENT&nbsp;DUPLICATES&nbsp;FROM&nbsp;it_zfi_aop&nbsp;COMPARING&nbsp;member.<br />
+<br />
+   </div>
+   <div class="codeComment">
+*&nbsp;&nbsp;READ&nbsp;TABLE&nbsp;it_zfi_aop&nbsp;INTO&nbsp;wa_zfi_aop&nbsp;INDEX&nbsp;1.<br />
+*&nbsp;&nbsp;IF&nbsp;sy-subrc&nbsp;EQ&nbsp;0.<br />
+*&nbsp;&nbsp;&nbsp;&nbsp;lv_perct&nbsp;=&nbsp;wa_aop-perct&nbsp;+&nbsp;wa_zfi_aop-perct.<br />
+*&nbsp;&nbsp;ENDIF.<br />
+<br />
+   </div>
+   <div class="code">
+&nbsp;&nbsp;CLEAR&nbsp;:&nbsp;lv_perct,<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;lv_share.<br />
+<br />
+&nbsp;&nbsp;LOOP&nbsp;AT&nbsp;it_zfi_aop&nbsp;INTO&nbsp;wa_zfi_aop.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;lv_perct&nbsp;=&nbsp;lv_perct&nbsp;+&nbsp;wa_zfi_aop-perct.<br />
+&nbsp;&nbsp;ENDLOOP.<br />
+<br />
+&nbsp;&nbsp;lv_share&nbsp;=&nbsp;lv_perct&nbsp;+&nbsp;wa_aop-perct.<br />
+<br />
+&nbsp;&nbsp;IF&nbsp;lv_share&nbsp;GT&nbsp;100.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;MESSAGE&nbsp;'Net&nbsp;share&nbsp;cannot&nbsp;be&nbsp;greater&nbsp;than&nbsp;100'&nbsp;TYPE&nbsp;'E'.<br />
+&nbsp;&nbsp;ENDIF.<br />
+<br />
+&nbsp;&nbsp;REFRESH&nbsp;:&nbsp;it_t001[],<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;it_adrc[].<br />
+<br />
+&nbsp;&nbsp;SELECT&nbsp;bukrs&nbsp;butxt&nbsp;adrnr&nbsp;FROM&nbsp;t001<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;INTO&nbsp;CORRESPONDING&nbsp;FIELDS&nbsp;OF&nbsp;TABLE&nbsp;it_t001.<br />
+&nbsp;&nbsp;IF&nbsp;NOT&nbsp;it_t001[]&nbsp;IS&nbsp;INITIAL.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;SELECT&nbsp;*&nbsp;FROM&nbsp;adrc&nbsp;INTO&nbsp;TABLE&nbsp;it_adrc<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;FOR&nbsp;ALL&nbsp;ENTRIES&nbsp;IN&nbsp;it_t001<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;WHERE&nbsp;addrnumber&nbsp;=&nbsp;it_t001-adrnr<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;AND&nbsp;title&nbsp;=&nbsp;'0019'.<br />
+&nbsp;&nbsp;ENDIF.<br />
+<br />
+&nbsp;&nbsp;LOOP&nbsp;AT&nbsp;it_t001&nbsp;INTO&nbsp;wa_t001.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;lv_tabix&nbsp;=&nbsp;sy-tabix.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;READ&nbsp;TABLE&nbsp;it_adrc&nbsp;INTO&nbsp;wa_adrc&nbsp;WITH&nbsp;KEY&nbsp;addrnumber&nbsp;=&nbsp;wa_t001-adrnr.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;IF&nbsp;sy-subrc&nbsp;NE&nbsp;0.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;DELETE&nbsp;it_t001&nbsp;INDEX&nbsp;lv_tabix.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;ENDIF.<br />
+&nbsp;&nbsp;ENDLOOP.<br />
+<br />
+&nbsp;&nbsp;IF&nbsp;wa_aop-entity&nbsp;IS&nbsp;NOT&nbsp;INITIAL.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;READ&nbsp;TABLE&nbsp;it_t001&nbsp;INTO&nbsp;wa_t001&nbsp;WITH&nbsp;KEY&nbsp;bukrs&nbsp;=&nbsp;wa_aop-entity.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;IF&nbsp;sy-subrc&nbsp;NE&nbsp;0.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;MESSAGE&nbsp;'Invalid&nbsp;Entity'&nbsp;TYPE&nbsp;'E'.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;ENDIF.<br />
+&nbsp;&nbsp;ENDIF.<br />
+<br />
+&nbsp;&nbsp;REFRESH&nbsp;:&nbsp;it_t001[],<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;it_adrc[].<br />
+<br />
+&nbsp;&nbsp;SELECT&nbsp;bukrs&nbsp;butxt&nbsp;adrnr&nbsp;FROM&nbsp;t001<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;INTO&nbsp;CORRESPONDING&nbsp;FIELDS&nbsp;OF&nbsp;TABLE&nbsp;it_t001.<br />
+&nbsp;&nbsp;IF&nbsp;NOT&nbsp;it_t001[]&nbsp;IS&nbsp;INITIAL.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;SELECT&nbsp;*&nbsp;FROM&nbsp;adrc&nbsp;INTO&nbsp;TABLE&nbsp;it_adrc<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;FOR&nbsp;ALL&nbsp;ENTRIES&nbsp;IN&nbsp;it_t001<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;WHERE&nbsp;addrnumber&nbsp;=&nbsp;it_t001-adrnr<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;AND&nbsp;title&nbsp;NE&nbsp;'0019'.<br />
+&nbsp;&nbsp;ENDIF.<br />
+<br />
+&nbsp;&nbsp;LOOP&nbsp;AT&nbsp;it_t001&nbsp;INTO&nbsp;wa_t001.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;lv_tabix&nbsp;=&nbsp;sy-tabix.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;READ&nbsp;TABLE&nbsp;it_adrc&nbsp;INTO&nbsp;wa_adrc&nbsp;WITH&nbsp;KEY&nbsp;addrnumber&nbsp;=&nbsp;wa_t001-adrnr.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;IF&nbsp;sy-subrc&nbsp;NE&nbsp;0.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;DELETE&nbsp;it_t001&nbsp;INDEX&nbsp;lv_tabix.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;ENDIF.<br />
+&nbsp;&nbsp;ENDLOOP.<br />
+<br />
+&nbsp;&nbsp;IF&nbsp;wa_aop-member&nbsp;IS&nbsp;NOT&nbsp;INITIAL.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;READ&nbsp;TABLE&nbsp;it_t001&nbsp;INTO&nbsp;wa_t001&nbsp;WITH&nbsp;KEY&nbsp;bukrs&nbsp;=&nbsp;wa_aop-member.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;IF&nbsp;sy-subrc&nbsp;NE&nbsp;0.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;MESSAGE&nbsp;'Invalid&nbsp;Member'&nbsp;TYPE&nbsp;'E'.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;ENDIF.<br />
+&nbsp;&nbsp;ENDIF.<br />
+<br />
+&nbsp;&nbsp;MODIFY&nbsp;it_aop<br />
+&nbsp;&nbsp;&nbsp;&nbsp;FROM&nbsp;wa_aop<br />
+&nbsp;&nbsp;&nbsp;&nbsp;INDEX&nbsp;tbc_9001-current_line.<br />
+<br />
+&nbsp;&nbsp;IF&nbsp;sy-subrc&nbsp;NE&nbsp;0.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;APPEND&nbsp;wa_aop&nbsp;TO&nbsp;it_aop.<br />
+&nbsp;&nbsp;ENDIF.<br />
+ENDMODULE.                    "TBC_9001_MODIFY INPUT<br />
+<br />
+   </div>
+   <div class="codeComment">
+*&SPWIZARD:&nbsp;INPUT&nbsp;MODUL&nbsp;FOR&nbsp;TC&nbsp;'TBC_9001'.&nbsp;DO&nbsp;NOT&nbsp;CHANGE&nbsp;THIS&nbsp;LINE!<br />
+*&SPWIZARD:&nbsp;MARK&nbsp;TABLE<br />
+   </div>
+   <div class="code">
+MODULE tbc_9001_mark INPUT.<br />
+&nbsp;&nbsp;DATA:&nbsp;g_tbc_9001_wa2&nbsp;LIKE&nbsp;LINE&nbsp;OF&nbsp;it_aop.<br />
+&nbsp;&nbsp;IF&nbsp;tbc_9001-line_sel_mode&nbsp;=&nbsp;1<br />
+&nbsp;&nbsp;AND&nbsp;wa_aop-sel&nbsp;=&nbsp;'X'.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;LOOP&nbsp;AT&nbsp;it_aop&nbsp;INTO&nbsp;g_tbc_9001_wa2<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;WHERE&nbsp;sel&nbsp;=&nbsp;'X'.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;g_tbc_9001_wa2-sel&nbsp;=&nbsp;''.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;MODIFY&nbsp;it_aop<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;FROM&nbsp;g_tbc_9001_wa2<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;TRANSPORTING&nbsp;sel.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;ENDLOOP.<br />
+&nbsp;&nbsp;ENDIF.<br />
+&nbsp;&nbsp;MODIFY&nbsp;it_aop<br />
+&nbsp;&nbsp;&nbsp;&nbsp;FROM&nbsp;wa_aop<br />
+&nbsp;&nbsp;&nbsp;&nbsp;INDEX&nbsp;tbc_9001-current_line<br />
+&nbsp;&nbsp;&nbsp;&nbsp;TRANSPORTING&nbsp;sel.<br />
+ENDMODULE.                    "TBC_9001_MARK INPUT<br />
+<br />
+   </div>
+   <div class="codeComment">
+*&SPWIZARD:&nbsp;INPUT&nbsp;MODULE&nbsp;FOR&nbsp;TC&nbsp;'TBC_9001'.&nbsp;DO&nbsp;NOT&nbsp;CHANGE&nbsp;THIS&nbsp;LINE!<br />
+*&SPWIZARD:&nbsp;PROCESS&nbsp;USER&nbsp;COMMAND<br />
+   </div>
+   <div class="code">
+MODULE tbc_9001_user_command INPUT.<br />
+&nbsp;&nbsp;ok_code&nbsp;=&nbsp;sy-ucomm.<br />
+&nbsp;&nbsp;PERFORM&nbsp;user_ok_tc&nbsp;USING&nbsp;&nbsp;&nbsp;&nbsp;'TBC_9001'<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;'IT_AOP'<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;'SEL'<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;CHANGING&nbsp;ok_code.<br />
+&nbsp;&nbsp;sy-ucomm&nbsp;=&nbsp;ok_code.<br />
+<br />
+&nbsp;&nbsp;CLEAR&nbsp;zsrno.<br />
+<br />
+&nbsp;&nbsp;CASE&nbsp;sy-ucomm.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;WHEN&nbsp;'SAVE'.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;LOOP&nbsp;AT&nbsp;it_aop&nbsp;INTO&nbsp;wa_aop.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;lv_tabix&nbsp;=&nbsp;sy-tabix.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;wa_aop-erdat&nbsp;=&nbsp;sy-datum.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;wa_aop-erzet&nbsp;=&nbsp;sy-uzeit.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;wa_aop-ernam&nbsp;=&nbsp;sy-uname.<br />
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;SELECT&nbsp;MAX(&nbsp;srno&nbsp;)&nbsp;FROM&nbsp;zfi_aop&nbsp;INTO&nbsp;zsrno.<br />
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;wa_aop-srno&nbsp;=&nbsp;zsrno&nbsp;+&nbsp;1.<br />
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;MODIFY&nbsp;it_aop&nbsp;FROM&nbsp;wa_aop&nbsp;INDEX&nbsp;lv_tabix<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;TRANSPORTING&nbsp;erdat&nbsp;erzet&nbsp;ernam&nbsp;srno.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;ENDLOOP.<br />
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;MODIFY&nbsp;zfi_aop&nbsp;FROM&nbsp;TABLE&nbsp;it_aop.<br />
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;MESSAGE&nbsp;'Data&nbsp;Saved&nbsp;Successfully'&nbsp;TYPE&nbsp;'S'.<br />
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;IF&nbsp;NOT&nbsp;it_aop[]&nbsp;IS&nbsp;INITIAL.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;PERFORM&nbsp;populate_mail_body.<br />
+<br />
+   </div>
+   <div class="codeComment">
+*&nbsp;Send&nbsp;internal&nbsp;table&nbsp;in&nbsp;the&nbsp;body&nbsp;of&nbsp;mail.<br />
+   </div>
+   <div class="code">
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;PERFORM&nbsp;mail_trigger<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;TABLES&nbsp;it_message<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;it_objtxt<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;USING&nbsp;'Changes&nbsp;in&nbsp;AOP&nbsp;data'<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;CHANGING&nbsp;gd_error<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;gd_reciever.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;ENDIF.<br />
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;WHEN&nbsp;'BACK'&nbsp;OR&nbsp;'EXIT'&nbsp;OR&nbsp;'CANC'.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;LEAVE&nbsp;TO&nbsp;SCREEN&nbsp;9000.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;WHEN&nbsp;OTHERS.<br />
+&nbsp;&nbsp;ENDCASE.<br />
+ENDMODULE.                    "TBC_9001_USER_COMMAND INPUT<br />
+   </div>
+   <div class="codeComment">
+*&---------------------------------------------------------------------*<br />
+*&&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Form&nbsp;&nbsp;POPULATE_MAIL_BODY<br />
+*&---------------------------------------------------------------------*<br />
+*&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;text<br />
+*----------------------------------------------------------------------*<br />
+*&nbsp;&nbsp;--&gt;&nbsp;&nbsp;p1&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;text<br />
+*&nbsp;&nbsp;&lt;--&nbsp;&nbsp;p2&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;text<br />
+*----------------------------------------------------------------------*<br />
+   </div>
+   <div class="code">
+FORM populate_mail_body .<br />
+&nbsp;&nbsp;REFRESH&nbsp;:&nbsp;it_recipient[].<br />
+<br />
+&nbsp;&nbsp;IF&nbsp;sy-mandt&nbsp;EQ&nbsp;'300'.<br />
+   </div>
+   <div class="codeComment">
+*&nbsp;Add&nbsp;the&nbsp;recipients&nbsp;email&nbsp;address<br />
+<br />
+   </div>
+   <div class="code">
+&nbsp;&nbsp;&nbsp;&nbsp;CLEAR&nbsp;wa_recipient.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;wa_recipient-receiver&nbsp;=&nbsp;'manoj.thakar@kalpataru.com'.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;wa_recipient-rec_type&nbsp;=&nbsp;'U'.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;wa_recipient-com_type&nbsp;=&nbsp;'INT'.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;wa_recipient-notif_del&nbsp;=&nbsp;'X'.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;wa_recipient-notif_ndel&nbsp;=&nbsp;'X'.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;APPEND&nbsp;wa_recipient&nbsp;TO&nbsp;it_recipient.<br />
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;CLEAR&nbsp;wa_recipient.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;wa_recipient-receiver&nbsp;=&nbsp;'prakash.bapna@kalpataru.com'.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;wa_recipient-rec_type&nbsp;=&nbsp;'U'.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;wa_recipient-com_type&nbsp;=&nbsp;'INT'.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;wa_recipient-notif_del&nbsp;=&nbsp;'X'.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;wa_recipient-notif_ndel&nbsp;=&nbsp;'X'.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;APPEND&nbsp;wa_recipient&nbsp;TO&nbsp;it_recipient.<br />
+<br />
+&nbsp;&nbsp;ELSE.<br />
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;CLEAR&nbsp;wa_recipient.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;wa_recipient-receiver&nbsp;=&nbsp;'yusuf.sheikh@kalpataru.com'.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;wa_recipient-rec_type&nbsp;=&nbsp;'U'.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;wa_recipient-com_type&nbsp;=&nbsp;'INT'.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;wa_recipient-notif_del&nbsp;=&nbsp;'X'.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;wa_recipient-notif_ndel&nbsp;=&nbsp;'X'.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;APPEND&nbsp;wa_recipient&nbsp;TO&nbsp;it_recipient.<br />
+&nbsp;&nbsp;ENDIF.<br />
+ENDFORM.                    " POPULATE_MAIL_BODY<br />
+   </div>
+   <div class="codeComment">
+*&---------------------------------------------------------------------*<br />
+*&&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Form&nbsp;&nbsp;MAIL_TRIGGER<br />
+*&---------------------------------------------------------------------*<br />
+*&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;text<br />
+*----------------------------------------------------------------------*<br />
+*&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;--&gt;P_IT_MESSAGE&nbsp;&nbsp;text<br />
+*&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;--&gt;P_IT_OBJTXT&nbsp;&nbsp;text<br />
+*&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;--&gt;P_0174&nbsp;&nbsp;&nbsp;text<br />
+*&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&lt;--P_GD_ERROR&nbsp;&nbsp;text<br />
+*&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&lt;--P_GD_RECIEVER&nbsp;&nbsp;text<br />
+*----------------------------------------------------------------------*<br />
+   </div>
+   <div class="code">
+FORM mail_trigger  TABLES  pit_message<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;pit_objtxt<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;USING&nbsp;&nbsp;p_mtitle<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;CHANGING&nbsp;p_error<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;p_reciever.<br />
+<br />
+   </div>
+   <div class="codeComment">
+*&nbsp;Fill&nbsp;the&nbsp;document&nbsp;data.<br />
+   </div>
+   <div class="code">
+&nbsp;&nbsp;CLEAR&nbsp;wa_document.<br />
+<br />
+   </div>
+   <div class="codeComment">
+*&nbsp;Populate&nbsp;the&nbsp;subject/generic&nbsp;message&nbsp;attributes<br />
+   </div>
+   <div class="code">
+&nbsp;&nbsp;wa_document-obj_langu&nbsp;=&nbsp;sy-langu.<br />
+&nbsp;&nbsp;wa_document-obj_name&nbsp;&nbsp;=&nbsp;'TEST'.<br />
+&nbsp;&nbsp;wa_document-obj_descr&nbsp;=&nbsp;p_mtitle&nbsp;.<br />
+<br />
+&nbsp;&nbsp;REFRESH&nbsp;:&nbsp;it_objtxt[].<br />
+<br />
+   </div>
+   <div class="codeComment">
+*...Message&nbsp;Body&nbsp;in&nbsp;HMTL<br />
+   </div>
+   <div class="code">
+&nbsp;&nbsp;wa_objtxt-line&nbsp;=&nbsp;'&lt;html&gt;&nbsp;&lt;body&gt;'.<br />
+&nbsp;&nbsp;APPEND&nbsp;wa_objtxt&nbsp;TO&nbsp;it_objtxt.<br />
+<br />
+   </div>
+   <div class="codeComment">
+*&nbsp;&nbsp;&nbsp;table&nbsp;display<br />
+   </div>
+   <div class="code">
+&nbsp;&nbsp;wa_objtxt-line&nbsp;=&nbsp;'&lt;table&nbsp;bordercolor="black"&nbsp;&nbsp;'.<br />
+&nbsp;&nbsp;APPEND&nbsp;wa_objtxt&nbsp;TO&nbsp;it_objtxt.<br />
+&nbsp;&nbsp;wa_objtxt-line&nbsp;=&nbsp;'&nbsp;cellspacing="0"&nbsp;width="1000"'.<br />
+&nbsp;&nbsp;APPEND&nbsp;wa_objtxt&nbsp;TO&nbsp;it_objtxt.<br />
+&nbsp;&nbsp;wa_objtxt-line&nbsp;=&nbsp;'&nbsp;border="1"&gt;&lt;tbody&gt;&lt;tr&gt;'.<br />
+&nbsp;&nbsp;APPEND&nbsp;wa_objtxt&nbsp;TO&nbsp;it_objtxt.<br />
+<br />
+   </div>
+   <div class="codeComment">
+*&nbsp;&nbsp;&nbsp;table&nbsp;header<br />
+   </div>
+   <div class="code">
+&nbsp;&nbsp;wa_objtxt-line&nbsp;=&nbsp;'&lt;th&gt;Serial&nbsp;No.&lt;/th&gt;&nbsp;&nbsp;'.<br />
+&nbsp;&nbsp;APPEND&nbsp;wa_objtxt&nbsp;TO&nbsp;it_objtxt.<br />
+&nbsp;&nbsp;wa_objtxt-line&nbsp;=&nbsp;'&lt;th&gt;AOP&lt;/th&gt;&nbsp;&nbsp;'.<br />
+&nbsp;&nbsp;APPEND&nbsp;wa_objtxt&nbsp;TO&nbsp;it_objtxt.<br />
+&nbsp;&nbsp;wa_objtxt-line&nbsp;=&nbsp;'&lt;th&gt;AOP&nbsp;Name&lt;/th&gt;&nbsp;&nbsp;'.<br />
+&nbsp;&nbsp;APPEND&nbsp;wa_objtxt&nbsp;TO&nbsp;it_objtxt.<br />
+&nbsp;&nbsp;wa_objtxt-line&nbsp;=&nbsp;'&lt;th&gt;Member&lt;/th&gt;'.<br />
+&nbsp;&nbsp;APPEND&nbsp;wa_objtxt&nbsp;TO&nbsp;it_objtxt.<br />
+&nbsp;&nbsp;wa_objtxt-line&nbsp;=&nbsp;'&lt;th&gt;Member&nbsp;Name&lt;/th&gt;&nbsp;&nbsp;'.<br />
+&nbsp;&nbsp;APPEND&nbsp;wa_objtxt&nbsp;TO&nbsp;it_objtxt.<br />
+&nbsp;&nbsp;wa_objtxt-line&nbsp;=&nbsp;'&lt;th&gt;Profit&nbsp;Share&lt;/th&gt;&nbsp;&nbsp;'.<br />
+&nbsp;&nbsp;APPEND&nbsp;wa_objtxt&nbsp;TO&nbsp;it_objtxt.<br />
+&nbsp;&nbsp;wa_objtxt-line&nbsp;=&nbsp;'&lt;th&gt;Valid&nbsp;From&nbsp;Date&lt;/th&gt;'.<br />
+&nbsp;&nbsp;APPEND&nbsp;wa_objtxt&nbsp;TO&nbsp;it_objtxt.<br />
+&nbsp;&nbsp;wa_objtxt-line&nbsp;=&nbsp;'&lt;th&gt;Valid&nbsp;To&lt;/th&gt;'.<br />
+&nbsp;&nbsp;APPEND&nbsp;wa_objtxt&nbsp;TO&nbsp;it_objtxt.<br />
+&nbsp;&nbsp;wa_objtxt-line&nbsp;=&nbsp;'&lt;th&gt;Created&nbsp;on&lt;/th&gt;'.<br />
+&nbsp;&nbsp;APPEND&nbsp;wa_objtxt&nbsp;TO&nbsp;it_objtxt.<br />
+&nbsp;&nbsp;wa_objtxt-line&nbsp;=&nbsp;'&lt;th&gt;Time&lt;/th&gt;'.<br />
+&nbsp;&nbsp;APPEND&nbsp;wa_objtxt&nbsp;TO&nbsp;it_objtxt.<br />
+&nbsp;&nbsp;wa_objtxt-line&nbsp;=&nbsp;'&lt;th&gt;Created&nbsp;by&lt;/th&gt;'.<br />
+&nbsp;&nbsp;APPEND&nbsp;wa_objtxt&nbsp;TO&nbsp;it_objtxt.<br />
+<br />
+   </div>
+   <div class="codeComment">
+*&nbsp;Table&nbsp;contents.<br />
+   </div>
+   <div class="code">
+&nbsp;&nbsp;LOOP&nbsp;AT&nbsp;it_aop&nbsp;INTO&nbsp;wa_aop.<br />
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;wa_objtxt-line&nbsp;=&nbsp;'&lt;tr&gt;'.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;APPEND&nbsp;wa_objtxt&nbsp;TO&nbsp;it_objtxt.<br />
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;CONCATENATE&nbsp;'&lt;td&gt;'&nbsp;wa_aop-srno&nbsp;'&lt;/td&gt;'&nbsp;INTO&nbsp;wa_objtxt-line.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;APPEND&nbsp;wa_objtxt&nbsp;TO&nbsp;it_objtxt.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;CONCATENATE&nbsp;'&lt;td&gt;'&nbsp;wa_aop-entity&nbsp;'&lt;/td&gt;'&nbsp;INTO&nbsp;wa_objtxt-line.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;APPEND&nbsp;wa_objtxt&nbsp;TO&nbsp;it_objtxt.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;CONCATENATE&nbsp;'&lt;td&gt;'&nbsp;wa_aop-butxt&nbsp;'&lt;/td&gt;'&nbsp;INTO&nbsp;wa_objtxt-line.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;APPEND&nbsp;wa_objtxt&nbsp;TO&nbsp;it_objtxt.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;CONCATENATE&nbsp;'&lt;td&gt;'&nbsp;wa_aop-member&nbsp;'&lt;/td&gt;'&nbsp;INTO&nbsp;wa_objtxt-line.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;APPEND&nbsp;wa_objtxt&nbsp;TO&nbsp;it_objtxt.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;CONCATENATE&nbsp;'&lt;td&gt;'&nbsp;wa_aop-butxt1&nbsp;'&lt;/td&gt;'&nbsp;INTO&nbsp;wa_objtxt-line.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;APPEND&nbsp;wa_objtxt&nbsp;TO&nbsp;it_objtxt.<br />
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;WRITE&nbsp;wa_aop-perct&nbsp;TO&nbsp;gv_perct.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;CONCATENATE&nbsp;'&lt;td&gt;'&nbsp;gv_perct&nbsp;'&lt;/td&gt;'&nbsp;INTO&nbsp;wa_objtxt-line.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;APPEND&nbsp;wa_objtxt&nbsp;TO&nbsp;it_objtxt.<br />
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;WRITE&nbsp;wa_aop-sdate&nbsp;TO&nbsp;p_date.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;CONCATENATE&nbsp;'&lt;td&gt;'&nbsp;p_date&nbsp;'&lt;/td&gt;'&nbsp;INTO&nbsp;wa_objtxt-line.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;APPEND&nbsp;wa_objtxt&nbsp;TO&nbsp;it_objtxt.<br />
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;WRITE&nbsp;wa_aop-tdate&nbsp;TO&nbsp;p_tdate.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;CONCATENATE&nbsp;'&lt;td&gt;'&nbsp;p_tdate&nbsp;'&lt;/td&gt;'&nbsp;INTO&nbsp;wa_objtxt-line.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;APPEND&nbsp;wa_objtxt&nbsp;TO&nbsp;it_objtxt.<br />
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;WRITE&nbsp;wa_aop-erdat&nbsp;TO&nbsp;p_erdat.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;CONCATENATE&nbsp;'&lt;td&gt;'&nbsp;p_erdat&nbsp;'&lt;/td&gt;'&nbsp;INTO&nbsp;wa_objtxt-line.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;APPEND&nbsp;wa_objtxt&nbsp;TO&nbsp;it_objtxt.<br />
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;WRITE&nbsp;wa_aop-erzet&nbsp;TO&nbsp;p_erzet.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;CONCATENATE&nbsp;'&lt;td&gt;'&nbsp;p_erzet&nbsp;'&lt;/td&gt;'&nbsp;INTO&nbsp;wa_objtxt-line.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;APPEND&nbsp;wa_objtxt&nbsp;TO&nbsp;it_objtxt.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;CONCATENATE&nbsp;'&lt;td&gt;'&nbsp;wa_aop-ernam&nbsp;'&lt;/td&gt;'&nbsp;INTO&nbsp;wa_objtxt-line.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;APPEND&nbsp;wa_objtxt&nbsp;TO&nbsp;it_objtxt.<br />
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;CLEAR&nbsp;:&nbsp;wa_aop.<br />
+&nbsp;&nbsp;ENDLOOP.<br />
+<br />
+   </div>
+   <div class="codeComment">
+*&nbsp;&nbsp;&nbsp;table&nbsp;close<br />
+   </div>
+   <div class="code">
+&nbsp;&nbsp;wa_objtxt-line&nbsp;=&nbsp;'&lt;/tbody&gt;&nbsp;&lt;/table&gt;'.<br />
+&nbsp;&nbsp;APPEND&nbsp;wa_objtxt&nbsp;TO&nbsp;it_objtxt.<br />
+<br />
+   </div>
+   <div class="codeComment">
+*&nbsp;&nbsp;&nbsp;HTML&nbsp;close<br />
+   </div>
+   <div class="code">
+&nbsp;&nbsp;wa_objtxt-line&nbsp;=&nbsp;'&lt;/body&gt;&nbsp;&lt;/html&gt;&nbsp;'.<br />
+&nbsp;&nbsp;APPEND&nbsp;wa_objtxt&nbsp;TO&nbsp;it_objtxt.<br />
+   </div>
+   <div class="codeComment">
+*&nbsp;Fill&nbsp;the&nbsp;document&nbsp;data&nbsp;and&nbsp;get&nbsp;size&nbsp;of&nbsp;attachment<br />
+<br />
+   </div>
+   <div class="code">
+&nbsp;&nbsp;DESCRIBE&nbsp;TABLE&nbsp;it_objtxt&nbsp;LINES&nbsp;tab_lines.<br />
+&nbsp;&nbsp;READ&nbsp;TABLE&nbsp;it_objtxt&nbsp;INTO&nbsp;wa_objtxt&nbsp;INDEX&nbsp;tab_lines.<br />
+&nbsp;&nbsp;wa_document-doc_size&nbsp;=<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;(&nbsp;tab_lines&nbsp;-&nbsp;1&nbsp;)&nbsp;*&nbsp;255&nbsp;+&nbsp;strlen(&nbsp;wa_objtxt&nbsp;).<br />
+<br />
+&nbsp;&nbsp;CALL&nbsp;FUNCTION&nbsp;'SO_NEW_DOCUMENT_SEND_API1'<br />
+&nbsp;&nbsp;&nbsp;&nbsp;EXPORTING<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;document_data&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;wa_document<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;document_type&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;'HTM'<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;put_in_outbox&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;'X'<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;commit_work&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;'X'<br />
+&nbsp;&nbsp;&nbsp;&nbsp;TABLES<br />
+   </div>
+   <div class="codeComment">
+*&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;OBJECT_HEADER&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;=<br />
+   </div>
+   <div class="code">
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;object_content&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;it_objtxt<br />
+   </div>
+   <div class="codeComment">
+*&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;CONTENTS_HEX&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;=<br />
+*&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;OBJECT_PARA&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;=<br />
+*&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;OBJECT_PARB&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;=<br />
+   </div>
+   <div class="code">
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;receivers&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;it_recipient<br />
+   </div>
+   <div class="codeComment">
+*&nbsp;&nbsp;&nbsp;EXCEPTIONS<br />
+*&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;TOO_MANY_RECEIVERS&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;1<br />
+*&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;DOCUMENT_NOT_SENT&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;2<br />
+*&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;DOCUMENT_TYPE_NOT_EXIST&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;3<br />
+*&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;OPERATION_NO_AUTHORIZATION&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;4<br />
+*&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;PARAMETER_ERROR&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;5<br />
+*&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;X_ERROR&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;6<br />
+*&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;ENQUEUE_ERROR&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;7<br />
+*&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;OTHERS&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;8<br />
+   </div>
+   <div class="code">
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;.<br />
+&nbsp;&nbsp;IF&nbsp;sy-subrc&nbsp;&lt;&gt;&nbsp;0.<br />
+   </div>
+   <div class="codeComment">
+*&nbsp;Implement&nbsp;suitable&nbsp;error&nbsp;handling&nbsp;here<br />
+   </div>
+   <div class="code">
+&nbsp;&nbsp;ENDIF.<br />
+ENDFORM.                    " MAIL_TRIGGER<br />
+   </div>
+   <div class="codeComment">
+*&---------------------------------------------------------------------*<br />
+*&&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Module&nbsp;&nbsp;F4_ENTITY&nbsp;&nbsp;INPUT<br />
+*&---------------------------------------------------------------------*<br />
+*&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;text<br />
+*----------------------------------------------------------------------*<br />
+   </div>
+   <div class="code">
+MODULE f4_entity INPUT.<br />
+&nbsp;&nbsp;REFRESH&nbsp;:&nbsp;it_t001[],<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;it_adrc[].<br />
+<br />
+&nbsp;&nbsp;SELECT&nbsp;bukrs&nbsp;butxt&nbsp;adrnr&nbsp;FROM&nbsp;t001<br />
+&nbsp;&nbsp;&nbsp;&nbsp;INTO&nbsp;CORRESPONDING&nbsp;FIELDS&nbsp;OF&nbsp;TABLE&nbsp;it_t001.<br />
+&nbsp;&nbsp;IF&nbsp;NOT&nbsp;it_t001[]&nbsp;IS&nbsp;INITIAL.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;SELECT&nbsp;*&nbsp;FROM&nbsp;adrc&nbsp;INTO&nbsp;TABLE&nbsp;it_adrc<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;FOR&nbsp;ALL&nbsp;ENTRIES&nbsp;IN&nbsp;it_t001<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;WHERE&nbsp;addrnumber&nbsp;=&nbsp;it_t001-adrnr<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;AND&nbsp;title&nbsp;=&nbsp;'0019'.<br />
+&nbsp;&nbsp;ENDIF.<br />
+<br />
+&nbsp;&nbsp;LOOP&nbsp;AT&nbsp;it_t001&nbsp;INTO&nbsp;wa_t001.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;lv_tabix&nbsp;=&nbsp;sy-tabix.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;READ&nbsp;TABLE&nbsp;it_adrc&nbsp;INTO&nbsp;wa_adrc&nbsp;WITH&nbsp;KEY&nbsp;addrnumber&nbsp;=&nbsp;wa_t001-adrnr.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;IF&nbsp;sy-subrc&nbsp;NE&nbsp;0.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;DELETE&nbsp;it_t001&nbsp;INDEX&nbsp;lv_tabix.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;ENDIF.<br />
+&nbsp;&nbsp;ENDLOOP.<br />
+<br />
+&nbsp;&nbsp;CALL&nbsp;FUNCTION&nbsp;'F4IF_INT_TABLE_VALUE_REQUEST'<br />
+&nbsp;&nbsp;&nbsp;&nbsp;EXPORTING<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;retfield&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;'BUKRS'<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;dynpprog&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;sy-repid<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;dynpnr&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;sy-dynnr<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;dynprofield&nbsp;=&nbsp;'WA_AOP-ENTITY'<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;value_org&nbsp;&nbsp;&nbsp;=&nbsp;'S'<br />
+&nbsp;&nbsp;&nbsp;&nbsp;TABLES<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;value_tab&nbsp;&nbsp;&nbsp;=&nbsp;it_t001[].<br />
+&nbsp;&nbsp;IF&nbsp;sy-subrc&nbsp;&lt;&gt;&nbsp;0.<br />
+   </div>
+   <div class="codeComment">
+*&nbsp;Implement&nbsp;suitable&nbsp;error&nbsp;handling&nbsp;here<br />
+   </div>
+   <div class="code">
+&nbsp;&nbsp;ENDIF.<br />
+ENDMODULE.                 " F4_ENTITY  INPUT<br />
+   </div>
+   <div class="codeComment">
+*&---------------------------------------------------------------------*<br />
+*&&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Module&nbsp;&nbsp;F4_MEMBER&nbsp;&nbsp;INPUT<br />
+*&---------------------------------------------------------------------*<br />
+*&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;text<br />
+*----------------------------------------------------------------------*<br />
+   </div>
+   <div class="code">
+MODULE f4_member INPUT.<br />
+&nbsp;&nbsp;REFRESH&nbsp;:&nbsp;it_t001[],<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;it_adrc[].<br />
+<br />
+&nbsp;&nbsp;SELECT&nbsp;bukrs&nbsp;butxt&nbsp;adrnr&nbsp;FROM&nbsp;t001<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;INTO&nbsp;CORRESPONDING&nbsp;FIELDS&nbsp;OF&nbsp;TABLE&nbsp;it_t001.<br />
+&nbsp;&nbsp;IF&nbsp;NOT&nbsp;it_t001[]&nbsp;IS&nbsp;INITIAL.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;SELECT&nbsp;*&nbsp;FROM&nbsp;adrc&nbsp;INTO&nbsp;TABLE&nbsp;it_adrc<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;FOR&nbsp;ALL&nbsp;ENTRIES&nbsp;IN&nbsp;it_t001<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;WHERE&nbsp;addrnumber&nbsp;=&nbsp;it_t001-adrnr<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;AND&nbsp;title&nbsp;NE&nbsp;'0019'.<br />
+&nbsp;&nbsp;ENDIF.<br />
+<br />
+&nbsp;&nbsp;LOOP&nbsp;AT&nbsp;it_t001&nbsp;INTO&nbsp;wa_t001.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;lv_tabix&nbsp;=&nbsp;sy-tabix.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;READ&nbsp;TABLE&nbsp;it_adrc&nbsp;INTO&nbsp;wa_adrc&nbsp;WITH&nbsp;KEY&nbsp;addrnumber&nbsp;=&nbsp;wa_t001-adrnr.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;IF&nbsp;sy-subrc&nbsp;NE&nbsp;0.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;DELETE&nbsp;it_t001&nbsp;INDEX&nbsp;lv_tabix.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;ENDIF.<br />
+&nbsp;&nbsp;ENDLOOP.<br />
+<br />
+&nbsp;&nbsp;CALL&nbsp;FUNCTION&nbsp;'F4IF_INT_TABLE_VALUE_REQUEST'<br />
+&nbsp;&nbsp;&nbsp;&nbsp;EXPORTING<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;retfield&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;'BUKRS'<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;dynpprog&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;sy-repid<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;dynpnr&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;sy-dynnr<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;dynprofield&nbsp;=&nbsp;'WA_AOP-MEMBER'<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;value_org&nbsp;&nbsp;&nbsp;=&nbsp;'S'<br />
+&nbsp;&nbsp;&nbsp;&nbsp;TABLES<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;value_tab&nbsp;&nbsp;&nbsp;=&nbsp;it_t001[].<br />
+&nbsp;&nbsp;IF&nbsp;sy-subrc&nbsp;&lt;&gt;&nbsp;0.<br />
+   </div>
+   <div class="codeComment">
+*&nbsp;Implement&nbsp;suitable&nbsp;error&nbsp;handling&nbsp;here<br />
+   </div>
+   <div class="code">
+&nbsp;&nbsp;ENDIF.<br />
+ENDMODULE.                 " F4_MEMBER  INPUT<br />
+   </div>
+   <div class="codeComment">
+*&---------------------------------------------------------------------*<br />
+*&&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Module&nbsp;&nbsp;USER_COMMAND_9000&nbsp;&nbsp;INPUT<br />
+*&---------------------------------------------------------------------*<br />
+*&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;text<br />
+*----------------------------------------------------------------------*<br />
+   </div>
+   <div class="code">
+MODULE user_command_9000 INPUT.<br />
+<br />
+&nbsp;&nbsp;REFRESH&nbsp;:&nbsp;it_aop[].<br />
+<br />
+&nbsp;&nbsp;CASE&nbsp;sy-ucomm.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;WHEN&nbsp;'CREATE'.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;CALL&nbsp;SCREEN&nbsp;9001.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;WHEN&nbsp;'DISPLAY'.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;SELECT&nbsp;*&nbsp;FROM&nbsp;zfi_aop&nbsp;INTO&nbsp;TABLE&nbsp;it_aop.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;CALL&nbsp;SCREEN&nbsp;9001.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;WHEN&nbsp;'BACK'&nbsp;OR&nbsp;'EXIT'&nbsp;OR&nbsp;'CANC'.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;LEAVE&nbsp;PROGRAM.<br />
+&nbsp;&nbsp;ENDCASE.<br />
+ENDMODULE.                 " USER_COMMAND_9000  INPUT<br />
+            </div>
+          </td>
+        </tr>
+      </table>
+      </td>
+      </tr>
+   <tr>
+<td class="footer">Extracted by Mass Download version 1.4.1 - E.G.Mellodew. 1998-2019. Sap Release 731</td>
+   </tr>
+</table>
+</body>
+</html>
